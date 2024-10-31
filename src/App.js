@@ -7,6 +7,11 @@ import LoginHostPage from './pages/LoginHostPage';
 import HostPage from './pages/HostPage';
 import GamePage from './pages/GamePage';
 import CustomNavbar from "./components/Navbar";
+import AdminCategories from './pages/CategoriesPage';
+import NewCategory from './pages/NewCategoryPage';
+import CategoryPage from './pages/CategoryPage';
+import NewGameTemplate from './pages/NewGameTemplatePage';
+import EditGameTemplate from './pages/EditGameTemplatePage';
 
 function App() {
     const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
@@ -19,18 +24,15 @@ function App() {
                 <Route path="/" element={<Navigate to="/home" />} />
                 <Route path="/home" element={<HomePage />} />
                 <Route
-                    path="/login-admin"
+                    path="/admin-login"
                     element={<LoginAdminPage setIsAdminAuthenticated={setIsAdminAuthenticated} />}
                 />
-                <Route
-                    path="/admin"
-                    element={isAdminAuthenticated ? <AdminPage /> : <Navigate to="/login-admin" />}
-                />
-                <Route path="/admin/create" element={isAdminAuthenticated ? <AdminPage /> : <Navigate to="/login-admin" />} />
-                <Route
-                    path="/admin/edit"
-                    element={isAdminAuthenticated ? <AdminPage /> : <Navigate to="/login-admin" />}
-                />
+                <Route path="/admin" element={isAdminAuthenticated ? <AdminPage /> : <Navigate to="/admin-login" />} />
+                <Route path="/admin/categories" element={isAdminAuthenticated ? <AdminCategories /> : <Navigate to="/admin-login" />} />
+                <Route path="/admin/new-category" element={isAdminAuthenticated ? <NewCategory /> : <Navigate to="/admin-login" />} />
+                <Route path="/admin/category" element={isAdminAuthenticated ? <CategoryPage /> : <Navigate to="/admin-login" />} />
+                <Route path="/admin/new-game" element={isAdminAuthenticated ? <NewGameTemplate /> : <Navigate to="/admin-login" />} />
+                <Route path="/admin/edit-game" element={isAdminAuthenticated ? <EditGameTemplate /> : <Navigate to="/admin-login" />} />
                 <Route
                     path="/login-host"
                     element={<LoginHostPage setIsHostAuthenticated={setIsHostAuthenticated} />}
