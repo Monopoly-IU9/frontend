@@ -1,25 +1,46 @@
 import React, { useState } from 'react';
+import AuthForm from '../components/AuthForm';
 import { useNavigate } from 'react-router-dom';
 
 function LoginAdminPage({ setIsAdminAuthenticated }) {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+    const [formData, setFormData] = useState({});
     const navigate = useNavigate();
+    const handleInputChange = (name, value) => {
+        setFormData((prevData) => ({ ...prevData, [name]: value }));
+    };
 
     const handleLogin = (e) => {
         e.preventDefault();
-        setIsAdminAuthenticated(true); // Ваша логика аутентификации
+        console.log('Admin login data:', formData);
+        setIsAdminAuthenticated(true);
         navigate('/admin');
     };
 
+    const fields = [
+        { name: 'username', label: 'Username', placeholder: 'Enter username', required: true },
+        { name: 'password', label: 'Password', type: 'password', placeholder: 'Enter password', required: true }
+    ];
+
+    const buttons = [
+        { type: 'submit', label: 'Login', onClick: handleLogin },
+        { type: 'button', label: 'Cancel', onClick: () => console.log('Cancelled') }
+    ]
+
     return (
         <div>
-            <h2>Admin Login</h2>
-            <form onSubmit={handleLogin}>
-                <input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
-                <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                <button type="submit">Login</button>
-            </form>
+            <div className="d-flex justify-content-center align-items-center vh-100">
+                <AuthForm fields={fields} buttons={buttons} onSubmit={handleInputChange}/>
+            </div>
+            {/*<AuthForm*/}
+            {/*    fields={[*/}
+            {/*        { name: 'username', label: 'Username', placeholder: 'Enter username', required: true },*/}
+            {/*        { name: 'password', label: 'Password', type: 'password', placeholder: 'Enter password', required: true }*/}
+            {/*    ]}*/}
+            {/*    buttons={[*/}
+            {/*        { label: 'Login', onClick: handleLogin, type: 'button' }*/}
+            {/*    ]}*/}
+            {/*    onSubmit={handleInputChange}*/}
+            {/*/>*/}
         </div>
     );
 }

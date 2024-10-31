@@ -1,46 +1,32 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import AuthForm from '../components/AuthForm';
 
-function LoginHostPage({ setIsHostAuthenticated }) {
-    const [gameId, setGameId] = useState('');
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const navigate = useNavigate();
+function LoginHostPage() {
+    const [formData, setFormData] = useState({});
 
-    const handleLogin = (e) => {
-        e.preventDefault();
-        // Ваша логика аутентификации ведущего (например, проверка введенных данных)
-        setIsHostAuthenticated(true); // Устанавливаем статус аутентификации
-        navigate(`/host/settings?id=${gameId}`); // Переход на страницу настройки игры
+    const handleInputChange = (name, value) => {
+        setFormData((prevData) => ({ ...prevData, [name]: value }));
+    };
+
+    const handleLogin = () => {
+        // Логика аутентификации ведущего
+        console.log('Host login data:', formData);
     };
 
     return (
         <div>
             <h2>Host Login</h2>
-            <form onSubmit={handleLogin}>
-                <input
-                    type="text"
-                    placeholder="Game ID"
-                    value={gameId}
-                    onChange={(e) => setGameId(e.target.value)}
-                    required
-                />
-                <input
-                    type="text"
-                    placeholder="Username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    required
-                />
-                <input
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                />
-                <button type="submit">Login</button>
-            </form>
+            <AuthForm
+                fields={[
+                    { name: 'gameId', label: 'Game ID', placeholder: 'Enter game ID', required: true },
+                    { name: 'username', label: 'Username', placeholder: 'Enter username', required: true },
+                    { name: 'password', label: 'Password', type: 'password', placeholder: 'Enter password', required: true }
+                ]}
+                buttons={[
+                    { label: 'Join Game', onClick: handleLogin, type: 'button' }
+                ]}
+                onSubmit={handleInputChange}
+            />
         </div>
     );
 }

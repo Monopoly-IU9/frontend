@@ -1,4 +1,3 @@
-// src/App.js
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import HomePage from './pages/HomePage';
@@ -7,6 +6,7 @@ import AdminPage from './pages/AdminPage';
 import LoginHostPage from './pages/LoginHostPage';
 import HostPage from './pages/HostPage';
 import GamePage from './pages/GamePage';
+import CustomNavbar from "./components/Navbar";
 
 function App() {
     const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
@@ -14,7 +14,9 @@ function App() {
 
     return (
         <Router>
+            <CustomNavbar />
             <Routes>
+                <Route path="/" element={<Navigate to="/home" />} />
                 <Route path="/home" element={<HomePage />} />
                 <Route
                     path="/login-admin"

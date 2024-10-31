@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 function HomePage() {
     return (
         <div>
-            <h1>Welcome to Monopoly Card Game</h1>
             <nav>
                 <Link to="/login-admin">Login as Admin</Link>
                 <br />
