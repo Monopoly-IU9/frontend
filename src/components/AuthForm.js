@@ -26,9 +26,9 @@ function AuthForm({ fields, buttons, onSubmit }) {
                     />
                 </div>
             ))}
-            <div className="d-flex gap-2">
+            <div className="d-flex gap-2 justify-content-center">
                 {buttons.map((button, index) => (
-                    <Button key={index} {...button} className="btn btn-light text-primary" />
+                    <Button key={index} {...button} className="btn btn-light text-primary " />
                 ))}
             </div>
         </form>

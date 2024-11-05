@@ -1,32 +1,42 @@
 import React, { useState } from 'react';
 import AuthForm from '../components/AuthForm';
+import { useNavigate } from 'react-router-dom';
 
-function LoginHostPage() {
+function LoginHostPage({ setIsHostAuthenticated }) {
     const [formData, setFormData] = useState({});
-
+    const navigate = useNavigate();
     const handleInputChange = (name, value) => {
         setFormData((prevData) => ({ ...prevData, [name]: value }));
     };
 
-    const handleLogin = () => {
-        // Логика аутентификации ведущего
+    const handleLogin = (e) => {
+        e.preventDefault();
         console.log('Host login data:', formData);
+        setIsHostAuthenticated(true);
+        navigate('/games');
+
     };
 
     return (
         <div>
-            <h2>Host Login</h2>
+            <div className="d-flex justify-content-center align-items-center vh-100">
             <AuthForm
                 fields={[
-                    { name: 'gameId', label: 'Game ID', placeholder: 'Enter game ID', required: true },
-                    { name: 'username', label: 'Username', placeholder: 'Enter username', required: true },
-                    { name: 'password', label: 'Password', type: 'password', placeholder: 'Enter password', required: true }
+                    {name: 'username', label: 'Username', placeholder: 'Enter username', required: true},
+                    {
+                        name: 'password',
+                        label: 'Password',
+                        type: 'password',
+                        placeholder: 'Enter password',
+                        required: true
+                    }
                 ]}
                 buttons={[
-                    { label: 'Join Game', onClick: handleLogin, type: 'button' }
+                    {label: 'Login', onClick: handleLogin, type: 'button'}
                 ]}
                 onSubmit={handleInputChange}
             />
+            </div>
         </div>
     );
 }

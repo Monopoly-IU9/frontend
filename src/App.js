@@ -4,7 +4,7 @@ import HomePage from './pages/HomePage';
 import LoginAdminPage from './pages/LoginAdminPage';
 import AdminPage from './pages/AdminPage';
 import LoginHostPage from './pages/LoginHostPage';
-import HostPage from './pages/HostPage';
+import HostPage from './pages/GamesPage';
 import GamePage from './pages/GamePage';
 import CustomNavbar from "./components/Navbar";
 import AdminCategories from './pages/CategoriesPage';
@@ -34,11 +34,11 @@ function App() {
                 <Route path="/admin/new-game" element={isAdminAuthenticated ? <NewGameTemplate /> : <Navigate to="/admin-login" />} />
                 <Route path="/admin/edit-game" element={isAdminAuthenticated ? <EditGameTemplate /> : <Navigate to="/admin-login" />} />
                 <Route
-                    path="/login-host"
+                    path="/login"
                     element={<LoginHostPage setIsHostAuthenticated={setIsHostAuthenticated} />}
                 />
                 <Route
-                    path="/host/settings"
+                    path="/games"
                     element={isHostAuthenticated ? <HostPage /> : <Navigate to="/login-host" />}
                 />
                 <Route path="/game" element={<GamePage />} />

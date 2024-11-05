@@ -23,7 +23,6 @@ function LoginAdminPage({ setIsAdminAuthenticated }) {
 
     const buttons = [
         { type: 'submit', label: 'Login', onClick: handleLogin },
-        { type: 'button', label: 'Cancel', onClick: () => console.log('Cancelled') }
     ]
 
     return (
