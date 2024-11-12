@@ -63,7 +63,7 @@ function GamePage({ isHost }) {
                 <Row className="justify-content-center mb-3">
                     <Col md={4}>
                         <Button
-                            variant="info"
+                            variant="primary"
                             className="w-100 mb-2"
                             onClick={handleShowModal} // Показать модальное окно
                         >
