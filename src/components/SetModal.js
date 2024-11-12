@@ -24,7 +24,7 @@ function SetModal({ show, onClose, onSave, set, cards }) {
     };
 
     const handleSave = () => {
-        onSave({ id: set ? set.id : Date.now(), name, cards: selectedCards });
+        onSave({ id: set ? set.id : Date.now(), name, cards: selectedCards, isMain: false });
         onClose();
     };
 

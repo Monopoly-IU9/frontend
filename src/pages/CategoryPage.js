@@ -12,7 +12,8 @@ function CategoryPage() {
         { id: 2, description: 'Пример карточки 2', tags: ['tag2', 'tag3'] },
         { id: 3, description: 'Пример карточки 3', tags: ['tag1'] }
     ]);
-    const [sets, setSets] = useState([]);
+    const [sets, setSets] = useState([
+    ]);
     const [showModal, setShowModal] = useState(false);
     const [showSetModal, setShowSetModal] = useState(false);
     const [selectedCard, setSelectedCard] = useState(null);
@@ -21,7 +22,7 @@ function CategoryPage() {
 
     useEffect(() => {
         // Главный набор, содержащий все карточки категории
-        setSets([{ name: 'Главный набор', cards: cards, isMain: true }]);
+        setSets([{ id: 0, name: 'Главный набор', cards: cards, isMain: true }]);
     }, [cards]);
 
     const handleUpdateCategory = () => {
@@ -42,6 +43,7 @@ function CategoryPage() {
 
     const handleAddSet = (newSet) => {
         setSets([...sets, { ...newSet, id: Date.now() }]);
+        console.log(sets);
     };
 
     const handleEditSet = (updatedSet) => {
@@ -51,7 +53,7 @@ function CategoryPage() {
     };
 
     const handleDeleteSet = (id) => {
-        setSets(sets.filter((set) => set.id !== id && !set.isMain));
+        setSets(sets.filter((set) => set.id !== id || set.isMain));
     };
 
     return (
@@ -111,7 +113,7 @@ function CategoryPage() {
             </ListGroup>
 
             {/* Кнопка добавления набора */}
-            <Button onClick={() => { setShowSetModal(true); setSelectedSet(null); }} className="btn btn-info mb-2">
+            <Button onClick={() => { setShowSetModal(true); setSelectedSet(null); }} className="btn btn-primary mb-2">
                 Добавить набор
             </Button>
             <SetModal
