@@ -13,6 +13,9 @@ function QRCodeModal({ show, onClose, gameId }) {
             <Modal.Body className="text-center">
                 {generateQRCode(gameUrl)}
             </Modal.Body>
+            <Modal.Footer>
+                <p>Ссылка на игру: <a href={gameUrl} target="_blank" rel="noopener noreferrer">{gameUrl}</a></p>
+            </Modal.Footer>
         </Modal>
     );
 }
