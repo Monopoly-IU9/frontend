@@ -1,36 +1,36 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import {useParams, useNavigate, useLocation} from 'react-router-dom';
 import { Container, Button, Row, Col } from 'react-bootstrap';
-import { fetchGameInfo, endGame } from '../api/GameAPI';
+// import { fetchGameInfo, endGame } from '../api/GameAPI';
 
 function GamePage({ isHost }) {
-    const { id: gameId } = useParams();
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const gameId = queryParams.get('id');
     const [gameInfo, setGameInfo] = useState(null);
     const navigate = useNavigate();
 
+    // Временные данные заглушки для игры
+    const placeholderGameInfo = {
+        id: gameId,
+        name: `Игра ${gameId}`,
+        description: `Описание игры ${gameId}`,
+        categories: [{ id: 1, name: 'Категория 1' }, { id: 2, name: 'Категория 2' }],
+    };
+
     useEffect(() => {
-        const loadGameInfo = async () => {
-            try {
-                const response = await fetchGameInfo(gameId);
-                setGameInfo(response.data);
-            } catch (error) {
-                console.error("Error loading game info:", error);
-            }
-        };
-        loadGameInfo();
+        // Симуляция загрузки данных игры
+        setGameInfo(placeholderGameInfo);
     }, [gameId]);
 
-    const handleEndGame = async () => {
-        try {
-            await endGame(gameId);
-            navigate(isHost ? '/host' : '/home');
-        } catch (error) {
-            console.error("Error ending game:", error);
-        }
+    const handleEndGame = () => {
+        // Симуляция окончания игры
+        alert(`Игра ${gameId} завершена`);
+        navigate(isHost ? '/games' : '/home');
     };
 
     const handleLogout = () => {
-        navigate(isHost ? '/host' : '/home');
+        navigate(isHost ? '/games' : '/home');
     };
 
     if (!gameInfo) return <div>Loading...</div>;
@@ -48,25 +48,43 @@ function GamePage({ isHost }) {
                         </Button>
                     </Col>
                     <Col md={4}>
-                        <Button variant="secondary" className="w-100 mb-2" onClick={handleLogout}>
-                            Выйти
-                        </Button>
-                    </Col>
-                    <Col md={4}>
                         <Button variant="danger" className="w-100" onClick={handleEndGame}>
                             Закончить Игру
                         </Button>
                     </Col>
                 </Row>
             )}
+            <Col md={4}>
+                <Button variant="secondary" className="w-100 mb-2" onClick={handleLogout}>
+                    Выйти
+                </Button>
+            </Col>
 
-            {/* Контент игры для всех пользователей */}
-            <div className="text-center mt-5">
-                <h5>Добро пожаловать в игру!</h5>
-                <p>Следуйте инструкциям на экране для продолжения.</p>
-            </div>
+
         </Container>
     );
 }
 
 export default GamePage;
+
+
+// useEffect(() => {
+    //     const loadGameInfo = async () => {
+    //         try {
+    //             const response = await fetchGameInfo(gameId);
+    //             setGameInfo(response.data);
+    //         } catch (error) {
+    //             console.error("Error loading game info:", error);
+    //         }
+    //     };
+    //     loadGameInfo();
+    // }, [gameId]);
+
+    // const handleEndGame = async () => {
+    //     try {
+    //         await endGame(gameId);
+    //         navigate(isHost ? '/host' : '/home');
+    //     } catch (error) {
+    //         console.error("Error ending game:", error);
+    //     }
+    // };

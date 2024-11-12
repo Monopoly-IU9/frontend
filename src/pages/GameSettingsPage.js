@@ -1,32 +1,31 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Container, ListGroup, Button } from 'react-bootstrap';
-import { fetchGameDetails, activateGame } from '../api/GameAPI';
 
 function GameSettingsPage() {
-    const { id: gameId } = useParams();
-    const [gameDetails, setGameDetails] = useState(null);
+    const location = useLocation();
     const navigate = useNavigate();
 
+    const queryParams = new URLSearchParams(location.search);
+    const gameId = queryParams.get('id');
+
+    const [gameDetails, setGameDetails] = useState(null);
+
+    const placeholderGameDetails = {
+        id: gameId,
+        name: `${gameId}`,
+        categories: [
+            { id: 1, name: 'Категория 1' },
+            { id: 2, name: 'Категория 2' },
+        ],
+    };
+
     useEffect(() => {
-        const loadGameDetails = async () => {
-            try {
-                const response = await fetchGameDetails(gameId);
-                setGameDetails(response.data);
-            } catch (error) {
-                console.error("Error loading game details:", error);
-            }
-        };
-        loadGameDetails();
+        setGameDetails(placeholderGameDetails);
     }, [gameId]);
 
-    const handleStartGame = async () => {
-        try {
-            await activateGame(gameId);
-            navigate(`/game?id=${gameId}`);
-        } catch (error) {
-            console.error("Error starting game:", error);
-        }
+    const handleStartGame = () => {
+        navigate(`/game?id=${gameId}`);
     };
 
     if (!gameDetails) return <div>Loading...</div>;
@@ -48,3 +47,26 @@ function GameSettingsPage() {
 }
 
 export default GameSettingsPage;
+
+
+// useEffect(() => {
+    //     const loadGameDetails = async () => {
+    //         try {
+    //             const response = await fetchGameDetails(gameId);
+    //             setGameDetails(response.data);
+    //         } catch (error) {
+    //             console.error("Error loading game details:", error);
+    //         }
+    //     };
+    //     loadGameDetails();
+    // }, [gameId]);
+    //
+    // const handleStartGame = async () => {
+    //     try {
+    //         await activateGame(gameId);
+    //         navigate(`/game?id=${gameId}`);
+    //     } catch (error) {
+    //         console.error("Error starting game:", error);
+    //     }
+    // };
+
