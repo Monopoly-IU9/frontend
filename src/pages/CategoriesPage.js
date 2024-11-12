@@ -8,9 +8,12 @@ function CategoriesPage() {
         <div className="container my-4 bg-light rounded p-4 shadow-sm">
             <Link to="/admin" className="btn btn-outline-secondary mb-3">Назад</Link>
             <h1 className="mb-4">Категории</h1>
-            <button className="btn btn-primary mb-4" onClick={() => navigate('/admin/new-category')}>
-                Создать новую категорию
-            </button>
+            <div className="d-flex flex-column gap-3">
+                <button className="btn btn-primary mb-4" onClick={() => navigate('/admin/new-category')}>
+                    Создать новую категорию
+                </button>
+            </div>
+
 
             <h2>Существующие категории</h2>
             <ul className="list-group">
