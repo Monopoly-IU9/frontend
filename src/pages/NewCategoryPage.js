@@ -9,13 +9,13 @@ function NewCategoryPage() {
 
     return (
         <div className="container my-4">
-            <h1>Create New Category</h1>
+            <h1>Создать новую категорию</h1>
             <div className="mb-3">
-                <label className="form-label">Category Name</label>
+                <label className="form-label">Имя категории</label>
                 <input type="text" className="form-control" value={name} onChange={(e) => setName(e.target.value)} />
             </div>
             <div className="mb-3">
-                <label className="form-label">Category Color</label>
+                <label className="form-label">Цвет категории</label>
                 <input type="color" className="form-control" value={color} onChange={(e) => setColor(e.target.value)} />
             </div>
             <button className="btn btn-primary" onClick={handleCreateCategory}>Create Category</button>

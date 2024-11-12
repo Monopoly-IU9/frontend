@@ -16,9 +16,9 @@ function NewGameTemplate() {
 
     return (
         <div className="container my-4">
-            <h1>Create New Game Template</h1>
+            <h1>Создать новый шаблон игры</h1>
             <div className="mb-3">
-                <label className="form-label">Game Name</label>
+                <label className="form-label">Имя игры</label>
                 <input
                     type="text"
                     className="form-control"
@@ -28,7 +28,7 @@ function NewGameTemplate() {
             </div>
 
             <div className="mb-3">
-                <label className="form-label">Categories</label>
+                <label className="form-label">Категории</label>
                 <div>
                     <input type="checkbox" onChange={() => setCategories([...categories, 'Category 1'])} />
                     Category 1
@@ -38,7 +38,7 @@ function NewGameTemplate() {
             </div>
 
             <div className="mb-3">
-                <label className="form-label">Sets</label>
+                <label className="form-label">Стопки</label>
                 <div>
                     <input type="checkbox" onChange={() => setSets([...sets, 'Set 1'])} /> Set 1
                     <input type="checkbox" onChange={() => setSets([...sets, 'Set 2'])} /> Set 2
@@ -46,7 +46,7 @@ function NewGameTemplate() {
             </div>
 
             <div className="mb-3">
-                <label className="form-label">Tags</label>
+                <label className="form-label">Теги</label>
                 <div>
                     <input type="checkbox" onChange={() => setTags([...tags, 'Tag 1'])} /> Tag 1
                     <input type="checkbox" onChange={() => setTags([...tags, 'Tag 2'])} /> Tag 2
@@ -54,7 +54,7 @@ function NewGameTemplate() {
             </div>
 
             <div className="mb-3">
-                <label className="form-label">Host Login</label>
+                <label className="form-label">Login ведущего</label>
                 <input
                     type="text"
                     className="form-control"
@@ -64,7 +64,7 @@ function NewGameTemplate() {
             </div>
 
             <div className="mb-3">
-                <label className="form-label">Host Password</label>
+                <label className="form-label">Password ведущего</label>
                 <input
                     type="password"
                     className="form-control"
@@ -73,7 +73,7 @@ function NewGameTemplate() {
                 />
             </div>
 
-            <button className="btn btn-primary" onClick={handleCreateGame}>Create Game</button>
+            <button className="btn btn-primary" onClick={handleCreateGame}>Создать игру</button>
         </div>
     );
 }
