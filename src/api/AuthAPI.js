@@ -1,6 +1,5 @@
 import axios from 'axios';
-
-const BASE_URL = '/api';
+import {BASE_URL} from "./config";
 
 export const loginAdmin = (username, password) =>
     axios.post(`${BASE_URL}/auth/admin-login`, { username, password });

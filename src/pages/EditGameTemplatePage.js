@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {Link, useNavigate, useSearchParams} from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 
 function EditGameTemplate() {
@@ -7,7 +7,6 @@ function EditGameTemplate() {
     const gameId = searchParams.get('id');
     const navigate = useNavigate();
 
-    // State для полей формы
     const [gameName, setGameName] = useState('');
     const [categories, setCategories] = useState([]);
     const [sets, setSets] = useState([]);
@@ -16,7 +15,6 @@ function EditGameTemplate() {
     const [hostPassword, setHostPassword] = useState('');
 
     useEffect(() => {
-        // Получение данных игры для редактирования по `gameId`
         const fetchGameData = async () => {
             setGameName('Sample Game');
             setCategories(['Category 1']);
@@ -25,35 +23,27 @@ function EditGameTemplate() {
             setHostLogin('sampleHost');
             setHostPassword('samplePassword');
         };
-        fetchGameData().then();
+        fetchGameData();
     }, [gameId]);
 
     const handleUpdateGame = (e) => {
         e.preventDefault();
-        console.log({
-            gameId, gameName, categories, sets, tags, hostLogin, hostPassword
-        });
         navigate('/admin');
     };
 
     const handleDeleteGame = (e) => {
         e.preventDefault();
-        console.log(`Delete Game with ID: ${gameId}`);
         navigate('/admin');
     };
 
     return (
-        <div className="container my-4">
-            <Link to="/admin/categories">Назад</Link>
-            <h1>Изменить шаблон игры</h1>
+        <div className="container my-4 bg-light rounded p-4 shadow-sm">
+            <Link to="/admin" className="btn btn-outline-secondary mb-3">Назад</Link>
+            <h1 className="mb-4">Изменить шаблон игры</h1>
+
             <div className="mb-3">
                 <label className="form-label">Название</label>
-                <input
-                    type="text"
-                    className="form-control"
-                    value={gameName}
-                    onChange={(e) => setGameName(e.target.value)}
-                />
+                <input type="text" className="form-control" value={gameName} onChange={(e) => setGameName(e.target.value)} />
             </div>
 
             <div className="mb-3">
@@ -82,30 +72,16 @@ function EditGameTemplate() {
 
             <div className="mb-3">
                 <label className="form-label">Логин ведущего</label>
-                <input
-                    type="text"
-                    className="form-control"
-                    value={hostLogin}
-                    onChange={(e) => setHostLogin(e.target.value)}
-                />
+                <input type="text" className="form-control" value={hostLogin} onChange={(e) => setHostLogin(e.target.value)} />
             </div>
 
             <div className="mb-3">
                 <label className="form-label">Пароль ведущего</label>
-                <input
-                    type="password"
-                    className="form-control"
-                    value={hostPassword}
-                    onChange={(e) => setHostPassword(e.target.value)}
-                />
+                <input type="password" className="form-control" value={hostPassword} onChange={(e) => setHostPassword(e.target.value)} />
             </div>
 
-            <Button onClick={handleUpdateGame} className="btn btn-primary">
-                Сохранить изменения
-            </Button>
-            <Button onClick={handleDeleteGame} className="btn btn-danger ms-2">
-                Удалаить игру
-            </Button>
+            <Button onClick={handleUpdateGame} className="btn btn-success">Сохранить изменения</Button>
+            <Button onClick={handleDeleteGame} className="btn btn-danger ms-2">Удалить игру</Button>
         </div>
     );
 }
