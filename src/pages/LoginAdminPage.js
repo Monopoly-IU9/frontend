@@ -30,16 +30,6 @@ function LoginAdminPage({ setIsAdminAuthenticated }) {
             <div className="d-flex justify-content-center align-items-center vh-100">
                 <AuthForm fields={fields} buttons={buttons} onSubmit={handleInputChange}/>
             </div>
-            {/*<AuthForm*/}
-            {/*    fields={[*/}
-            {/*        { name: 'username', label: 'Username', placeholder: 'Enter username', required: true },*/}
-            {/*        { name: 'password', label: 'Password', type: 'password', placeholder: 'Enter password', required: true }*/}
-            {/*    ]}*/}
-            {/*    buttons={[*/}
-            {/*        { label: 'Login', onClick: handleLogin, type: 'button' }*/}
-            {/*    ]}*/}
-            {/*    onSubmit={handleInputChange}*/}
-            {/*/>*/}
         </div>
     );
 }

@@ -39,7 +39,7 @@ function App() {
                 />
                 <Route
                     path="/games"
-                    element={isHostAuthenticated ? <HostPage /> : <Navigate to="/login-host" />}
+                    element={isHostAuthenticated ? <HostPage /> : <Navigate to="/login" />}
                 />
                 <Route path="/game" element={<GamePage />} />
             </Routes>

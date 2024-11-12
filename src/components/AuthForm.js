@@ -1,5 +1,5 @@
 import React from 'react';
-import Button from './Button';
+import { Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function AuthForm({ fields, buttons, onSubmit }) {
@@ -28,7 +28,9 @@ function AuthForm({ fields, buttons, onSubmit }) {
             ))}
             <div className="d-flex gap-2 justify-content-center">
                 {buttons.map((button, index) => (
-                    <Button key={index} {...button} className="btn btn-light text-primary " />
+                    <Button key={index} {...button} className="btn btn-light text-primary">
+                        {button.label}
+                    </Button>
                 ))}
             </div>
         </form>

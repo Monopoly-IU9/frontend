@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { Button } from 'react-bootstrap';
+import { Link, useNavigate } from "react-router-dom";
 
 function NewGameTemplate() {
     const [gameName, setGameName] = useState('');
@@ -7,15 +9,19 @@ function NewGameTemplate() {
     const [tags, setTags] = useState([]);
     const [hostLogin, setHostLogin] = useState('');
     const [hostPassword, setHostPassword] = useState('');
+    const navigate = useNavigate();
 
-    const handleCreateGame = () => {
+    const handleCreateGame = (e) => {
+        e.preventDefault();
         console.log({
             gameName, categories, sets, tags, hostLogin, hostPassword
         });
+        navigate('/admin');
     };
 
     return (
         <div className="container my-4">
+            <Link to="/admin/categories">Назад</Link>
             <h1>Создать новый шаблон игры</h1>
             <div className="mb-3">
                 <label className="form-label">Имя игры</label>
@@ -72,8 +78,9 @@ function NewGameTemplate() {
                     onChange={(e) => setHostPassword(e.target.value)}
                 />
             </div>
-
-            <button className="btn btn-primary" onClick={handleCreateGame}>Создать игру</button>
+            <Button onClick={handleCreateGame} className="btn btn-primary">
+                Создать игру
+            </Button>
         </div>
     );
 }

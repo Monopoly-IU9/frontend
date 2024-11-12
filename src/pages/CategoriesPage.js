@@ -1,11 +1,12 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 
 function CategoriesPage() {
     const navigate = useNavigate();
 
     return (
         <div className="container my-4">
+            <Link to="/admin">Назад</Link>
             <h1>Категории</h1>
             <button className="btn btn-primary" onClick={() => navigate('/admin/new-category')}>Создать новую категорию</button>
 
