@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import {Link, useLocation, useNavigate} from 'react-router-dom';
 import { Container, ListGroup, Button } from 'react-bootstrap';
 
 function GameSettingsPage() {
@@ -32,6 +32,7 @@ function GameSettingsPage() {
 
     return (
         <Container className="my-5">
+            <Link to="/games" className="btn btn-outline-secondary mb-3">Назад</Link>
             <h2 className="text-primary">Настройки Игры: {gameDetails.name}</h2>
             <p className="text-muted mb-4">Выбранные категории для этой игры:</p>
             <ListGroup className="mb-4">
@@ -40,7 +41,7 @@ function GameSettingsPage() {
                 ))}
             </ListGroup>
             <Button variant="primary" size="lg" onClick={handleStartGame} className="w-100">
-                Создать Игру
+                Начать Игру
             </Button>
         </Container>
     );

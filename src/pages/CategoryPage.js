@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
 import CategoryModal from '../components/CategoryModal';
 import { Button } from 'react-bootstrap';
-import { Link } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 function CategoryPage() {
     const [name, setName] = useState('Category 1');
     const [color, setColor] = useState('#0000FF');
     const [showModal, setShowModal] = useState(false);
 
+    const navigate = useNavigate();
+
     const handleUpdateCategory = () => {
         // handle update logic
+        navigate(`/admin/categories`);
     };
 
     return (

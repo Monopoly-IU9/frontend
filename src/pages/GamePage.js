@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {useParams, useNavigate, useLocation} from 'react-router-dom';
-import { Container, Button, Row, Col } from 'react-bootstrap';
+import {Container, Button, Row, Col, ListGroup} from 'react-bootstrap';
+import QRCodeModal from "../components/QRCodeModal";
 // import { fetchGameInfo, endGame } from '../api/GameAPI';
 
 function GamePage({ isHost }) {
@@ -8,14 +9,18 @@ function GamePage({ isHost }) {
     const queryParams = new URLSearchParams(location.search);
     const gameId = queryParams.get('id');
     const [gameInfo, setGameInfo] = useState(null);
+    const [showModal, setShowModal] = useState(false); // Состояние для отображения модального окна
     const navigate = useNavigate();
 
     // Временные данные заглушки для игры
     const placeholderGameInfo = {
         id: gameId,
         name: `Игра ${gameId}`,
-        description: `Описание игры ${gameId}`,
-        categories: [{ id: 1, name: 'Категория 1' }, { id: 2, name: 'Категория 2' }],
+        categories: [
+            { id: 1, name: 'Категория 1', color: 'success' },
+            { id: 2, name: 'Категория 2', color: 'danger' },
+            { id: 3, name: 'Категория 3', color: 'primary' },
+        ],
     };
 
     useEffect(() => {
@@ -25,7 +30,6 @@ function GamePage({ isHost }) {
 
     const handleEndGame = () => {
         // Симуляция окончания игры
-        alert(`Игра ${gameId} завершена`);
         navigate(isHost ? '/games' : '/home');
     };
 
@@ -33,17 +37,36 @@ function GamePage({ isHost }) {
         navigate(isHost ? '/games' : '/home');
     };
 
+    const handleShowModal = () => setShowModal(true); // Открытие модального окна
+    const handleCloseModal = () => setShowModal(false); // Закрытие модального окна
+
     if (!gameInfo) return <div>Loading...</div>;
 
     return (
         <Container className="my-5">
             <h2 className="text-primary">{gameInfo.name}</h2>
-            <p className="text-muted mb-4">{gameInfo.description || "Описание игры"}</p>
+
+            {/* Вывод категорий игры с кастомными цветами и размером */}
+            <ListGroup className="mb-4">
+                {gameInfo.categories.map(category => (
+                    <ListGroup.Item
+                        key={category.id}
+                        variant={category.color}
+                        style={{ fontSize: '1.25rem', padding: '12px 20px' }}
+                    >
+                        {category.name}
+                    </ListGroup.Item>
+                ))}
+            </ListGroup>
 
             {isHost && (
                 <Row className="justify-content-center mb-3">
                     <Col md={4}>
-                        <Button variant="info" className="w-100 mb-2" onClick={() => alert(`QR-код: /game?id=${gameId}`)}>
+                        <Button
+                            variant="info"
+                            className="w-100 mb-2"
+                            onClick={handleShowModal} // Показать модальное окно
+                        >
                             Показать QR-код
                         </Button>
                     </Col>
@@ -54,13 +77,17 @@ function GamePage({ isHost }) {
                     </Col>
                 </Row>
             )}
-            <Col md={4}>
-                <Button variant="secondary" className="w-100 mb-2" onClick={handleLogout}>
-                    Выйти
-                </Button>
-            </Col>
 
+            <Row className="justify-content-center mb-3">
+                <Col md={4}>
+                    <Button variant="secondary" className="w-100 mb-2" onClick={handleLogout}>
+                        Выйти
+                    </Button>
+                </Col>
+            </Row>
 
+            {/* Модальное окно для отображения QR-кода */}
+            <QRCodeModal show={showModal} onClose={handleCloseModal} gameId={gameId} />
         </Container>
     );
 }
