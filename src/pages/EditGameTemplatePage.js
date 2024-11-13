@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { Button } from 'react-bootstrap';
+import React, {useState, useEffect} from 'react';
+import {Link, useNavigate, useSearchParams} from 'react-router-dom';
+import {Button} from 'react-bootstrap';
 
 function EditGameTemplate() {
     const [searchParams] = useSearchParams();
@@ -14,17 +14,62 @@ function EditGameTemplate() {
     const [hostLogin, setHostLogin] = useState('');
     const [hostPassword, setHostPassword] = useState('');
 
+    // Захардкоженные данные для симуляции
+    const allCategories = [
+        {id: 1, name: 'Category 1', color: 'blue'},
+        {id: 2, name: 'Category 2', color: 'green'}
+    ];
+    const allSets = [
+        {id: 1, name: 'Set 1', categoryId: 1},
+        {id: 2, name: 'Set 2', categoryId: 2}
+    ];
+    const allTags = ['Tag 1', 'Tag 2'];
+
+    // Инициализация данных
     useEffect(() => {
-        const fetchGameData = async () => {
-            setGameName('Sample Game');
-            setCategories(['Category 1']);
-            setSets(['Set 1']);
-            setTags(['Tag 1']);
-            setHostLogin('sampleHost');
-            setHostPassword('samplePassword');
-        };
-        fetchGameData();
+        setGameName('Sample Game');
+        setCategories([]); // Изначально категории пусты
+        setSets([]); // Изначально наборы пусты
+        setTags(allTags); // Изначально выбираем все теги
+        setHostLogin('sampleHost');
+        setHostPassword('samplePassword');
     }, [gameId]);
+
+    // Обновление выбора категории
+    const toggleCategory = (categoryId) => {
+        setCategories((prevCategories) => {
+            if (prevCategories.includes(categoryId)) {
+                return prevCategories.filter((id) => id !== categoryId);
+            } else {
+                return [...prevCategories, categoryId];
+            }
+        });
+    };
+
+    // Обновление выбора набора
+    const toggleSet = (setId) => {
+        setSets((prevSets) => {
+            if (prevSets.includes(setId)) {
+                return prevSets.filter((id) => id !== setId);
+            } else {
+                return [...prevSets, setId];
+            }
+        });
+    };
+
+    // Обновление выбора тегов
+    const toggleTag = (tag) => {
+        setTags((prevTags) => {
+            if (prevTags.includes(tag)) {
+                return prevTags.filter((t) => t !== tag);
+            } else {
+                return [...prevTags, tag];
+            }
+        });
+    };
+
+    // Фильтрация наборов на основе выбранных категорий
+    const filteredSets = allSets.filter((set) => categories.includes(set.categoryId));
 
     const handleUpdateGame = (e) => {
         e.preventDefault();
@@ -43,41 +88,72 @@ function EditGameTemplate() {
 
             <div className="mb-3">
                 <label className="form-label">Название</label>
-                <input type="text" className="form-control" value={gameName} onChange={(e) => setGameName(e.target.value)} />
+                <input type="text" className="form-control" value={gameName}
+                       onChange={(e) => setGameName(e.target.value)}/>
             </div>
 
             <div className="mb-3">
                 <label className="form-label">Категории</label>
                 <div>
-                    <input type="checkbox" checked={categories.includes('Category 1')} onChange={() => setCategories([...categories, 'Category 1'])} /> Category 1
-                    <input type="checkbox" checked={categories.includes('Category 2')} onChange={() => setCategories([...categories, 'Category 2'])} /> Category 2
+                    {allCategories.map((category) => (
+                        <div key={category.id}>
+                            <input
+                                type="checkbox"
+                                checked={categories.includes(category.id)}
+                                onChange={() => toggleCategory(category.id)}
+                            />{' '}
+                            {category.name}
+                        </div>
+                    ))}
                 </div>
             </div>
 
             <div className="mb-3">
                 <label className="form-label">Наборы</label>
                 <div>
-                    <input type="checkbox" checked={sets.includes('Set 1')} onChange={() => setSets([...sets, 'Set 1'])} /> Set 1
-                    <input type="checkbox" checked={sets.includes('Set 2')} onChange={() => setSets([...sets, 'Set 2'])} /> Set 2
+                    {filteredSets.length > 0 ? (
+                        filteredSets.map((set) => (
+                            <div key={set.id}>
+                                <input
+                                    type="checkbox"
+                                    checked={sets.includes(set.id)}
+                                    onChange={() => toggleSet(set.id)}
+                                />{' '}
+                                {set.name}
+                            </div>
+                        ))
+                    ) : (
+                        <p>Нет доступных наборов для выбранных категорий.</p>
+                    )}
                 </div>
             </div>
 
             <div className="mb-3">
                 <label className="form-label">Теги</label>
                 <div>
-                    <input type="checkbox" checked={tags.includes('Tag 1')} onChange={() => setTags([...tags, 'Tag 1'])} /> Tag 1
-                    <input type="checkbox" checked={tags.includes('Tag 2')} onChange={() => setTags([...tags, 'Tag 2'])} /> Tag 2
+                    {allTags.map((tag) => (
+                        <div key={tag}>
+                            <input
+                                type="checkbox"
+                                checked={tags.includes(tag)}
+                                onChange={() => toggleTag(tag)}
+                            />{' '}
+                            {tag}
+                        </div>
+                    ))}
                 </div>
             </div>
 
             <div className="mb-3">
                 <label className="form-label">Логин ведущего</label>
-                <input type="text" className="form-control" value={hostLogin} onChange={(e) => setHostLogin(e.target.value)} />
+                <input type="text" className="form-control" value={hostLogin}
+                       onChange={(e) => setHostLogin(e.target.value)}/>
             </div>
 
             <div className="mb-3">
                 <label className="form-label">Пароль ведущего</label>
-                <input type="password" className="form-control" value={hostPassword} onChange={(e) => setHostPassword(e.target.value)} />
+                <input type="password" className="form-control" value={hostPassword}
+                       onChange={(e) => setHostPassword(e.target.value)}/>
             </div>
 
             <Button onClick={handleUpdateGame} className="btn btn-success">Сохранить изменения</Button>
