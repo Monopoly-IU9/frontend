@@ -1,6 +1,7 @@
-import React, {useState, useEffect} from 'react';
-import {Link, useNavigate, useSearchParams} from 'react-router-dom';
-import {Button} from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { Button } from 'react-bootstrap';
+import HostModal from '../components/HostModal';
 
 function EditGameTemplate() {
     const [searchParams] = useSearchParams();
@@ -13,15 +14,18 @@ function EditGameTemplate() {
     const [tags, setTags] = useState([]);
     const [hostLogin, setHostLogin] = useState('');
     const [hostPassword, setHostPassword] = useState('');
+    const [showHostModal, setShowHostModal] = useState(false); // Состояние для отображения модального окна
 
     // Захардкоженные данные для симуляции
     const allCategories = [
-        {id: 1, name: 'Category 1', color: 'blue'},
-        {id: 2, name: 'Category 2', color: 'green'}
+        { id: 1, name: 'Category 1', color: 'blue' },
+        { id: 2, name: 'Category 2', color: 'green' }
     ];
     const allSets = [
-        {id: 1, name: 'Set 1', categoryId: 1},
-        {id: 2, name: 'Set 2', categoryId: 2}
+        { id: 1, name: 'Общий набор 1', categoryId: 1 },
+        { id: 2, name: 'Набор 1', categoryId: 1 },
+        { id: 3, name: 'Общий набор 2', categoryId: 2 },
+        { id: 4, name: 'Набор 2', categoryId: 2 }
     ];
     const allTags = ['Tag 1', 'Tag 2'];
 
@@ -37,35 +41,27 @@ function EditGameTemplate() {
 
     // Обновление выбора категории
     const toggleCategory = (categoryId) => {
-        setCategories((prevCategories) => {
-            if (prevCategories.includes(categoryId)) {
-                return prevCategories.filter((id) => id !== categoryId);
-            } else {
-                return [...prevCategories, categoryId];
-            }
-        });
+        setCategories((prevCategories) =>
+            prevCategories.includes(categoryId)
+                ? prevCategories.filter((id) => id !== categoryId)
+                : [...prevCategories, categoryId]
+        );
     };
 
     // Обновление выбора набора
     const toggleSet = (setId) => {
-        setSets((prevSets) => {
-            if (prevSets.includes(setId)) {
-                return prevSets.filter((id) => id !== setId);
-            } else {
-                return [...prevSets, setId];
-            }
-        });
+        setSets((prevSets) =>
+            prevSets.includes(setId)
+                ? prevSets.filter((id) => id !== setId)
+                : [...prevSets, setId]
+        );
     };
 
     // Обновление выбора тегов
     const toggleTag = (tag) => {
-        setTags((prevTags) => {
-            if (prevTags.includes(tag)) {
-                return prevTags.filter((t) => t !== tag);
-            } else {
-                return [...prevTags, tag];
-            }
-        });
+        setTags((prevTags) =>
+            prevTags.includes(tag) ? prevTags.filter((t) => t !== tag) : [...prevTags, tag]
+        );
     };
 
     // Фильтрация наборов на основе выбранных категорий
@@ -88,8 +84,12 @@ function EditGameTemplate() {
 
             <div className="mb-3">
                 <label className="form-label">Название</label>
-                <input type="text" className="form-control" value={gameName}
-                       onChange={(e) => setGameName(e.target.value)}/>
+                <input
+                    type="text"
+                    className="form-control"
+                    value={gameName}
+                    onChange={(e) => setGameName(e.target.value)}
+                />
             </div>
 
             <div className="mb-3">
@@ -144,20 +144,21 @@ function EditGameTemplate() {
                 </div>
             </div>
 
-            <div className="mb-3">
-                <label className="form-label">Логин ведущего</label>
-                <input type="text" className="form-control" value={hostLogin}
-                       onChange={(e) => setHostLogin(e.target.value)}/>
-            </div>
-
-            <div className="mb-3">
-                <label className="form-label">Пароль ведущего</label>
-                <input type="password" className="form-control" value={hostPassword}
-                       onChange={(e) => setHostPassword(e.target.value)}/>
-            </div>
+            <Button variant="primary" className="mb-3" onClick={() => setShowHostModal(true)}>
+                Настроить ведущего
+            </Button>
 
             <Button onClick={handleUpdateGame} className="btn btn-success">Сохранить изменения</Button>
             <Button onClick={handleDeleteGame} className="btn btn-danger ms-2">Удалить игру</Button>
+
+            <HostModal
+                show={showHostModal}
+                onHide={() => setShowHostModal(false)}
+                hostLogin={hostLogin}
+                setHostLogin={setHostLogin}
+                hostPassword={hostPassword}
+                setHostPassword={setHostPassword}
+            />
         </div>
     );
 }
