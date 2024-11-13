@@ -23,7 +23,7 @@ function GameSettingsPage() {
     useEffect(() => {
         setGameDetails(placeholderGameDetails);
     }, [gameId]);
-
+    // обработка запуска игры
     const handleStartGame = () => {
         navigate(`/game?id=${gameId}`);
     };

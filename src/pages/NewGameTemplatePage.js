@@ -6,9 +6,9 @@ function NewGameTemplate() {
     const [gameName, setGameName] = useState('');
     const navigate = useNavigate();
 
+    // логика создания шаблона игры
     const handleCreateGame = (e) => {
         e.preventDefault();
-        // handle create logic
         navigate('/admin');
     };
 

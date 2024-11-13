@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form, InputGroup } from 'react-bootstrap';
 
+// модальное окно для добавления или редактирования карточки в категории
 function CategoryModal({ show, onClose, onSave, card }) {
     const [description, setDescription] = useState('');
     const [tags, setTags] = useState([]);
@@ -15,18 +16,18 @@ function CategoryModal({ show, onClose, onSave, card }) {
             setTags([]);
         }
     }, [card]);
-
+    // обработка добавления тега
     const handleAddTag = () => {
         if (newTag && !tags.includes(newTag)) {
             setTags([...tags, newTag]);
             setNewTag('');
         }
     };
-
+    // обработка удаления тега
     const handleRemoveTag = (tagToRemove) => {
         setTags(tags.filter(tag => tag !== tagToRemove));
     };
-
+    // обработка сохранения
     const handleSave = () => {
         onSave({ id: card ? card.id : Date.now(), description, tags });
         onClose();

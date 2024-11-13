@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 function CategoriesPage() {
+    // Навигатор для перехода по страницам
     const navigate = useNavigate();
 
     return (

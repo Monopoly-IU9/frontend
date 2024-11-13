@@ -7,9 +7,9 @@ function NewCategoryPage() {
     const [color, setColor] = useState('#0000FF');
     const navigate = useNavigate();
 
+    // обработка создания категории
     const handleCreateCategory = (e) => {
         e.preventDefault();
-        // handle create logic
         navigate(`/admin/categories`);
     };
 

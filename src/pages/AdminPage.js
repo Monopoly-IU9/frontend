@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function AdminPage() {
+    // Навигатор для перехода по страницам
     const navigate = useNavigate();
 
     return (

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form, ListGroup } from 'react-bootstrap';
 
+
+// модальное окно для создания или изменения набора
 function SetModal({ show, onClose, onSave, set, cards }) {
     const [name, setName] = useState('');
     const [selectedCards, setSelectedCards] = useState([]);
@@ -15,6 +17,7 @@ function SetModal({ show, onClose, onSave, set, cards }) {
         }
     }, [set]);
 
+    // обработка выбора карточек
     const handleCardSelection = (card) => {
         setSelectedCards(
             selectedCards.includes(card)
@@ -23,6 +26,7 @@ function SetModal({ show, onClose, onSave, set, cards }) {
         );
     };
 
+    // обработка сохранения изменений
     const handleSave = () => {
         onSave({ id: set ? set.id : Date.now(), name, cards: selectedCards, isMain: false });
         onClose();

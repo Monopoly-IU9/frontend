@@ -12,7 +12,7 @@ function GamePage({ isHost }) {
     const [showModal, setShowModal] = useState(false); // Состояние для отображения модального окна
     const navigate = useNavigate();
 
-    // Временные данные заглушки для игры
+    // Временные данные для игры
     const placeholderGameInfo = {
         id: gameId,
         name: `Игра ${gameId}`,
@@ -24,12 +24,12 @@ function GamePage({ isHost }) {
     };
 
     useEffect(() => {
-        // Симуляция загрузки данных игры
+        // загрузка данных игры
         setGameInfo(placeholderGameInfo);
     }, [gameId]);
 
     const handleEndGame = () => {
-        // Симуляция окончания игры
+        // окончание игры
         navigate(isHost ? '/games' : '/home');
     };
 

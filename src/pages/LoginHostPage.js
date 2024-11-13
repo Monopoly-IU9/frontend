@@ -8,7 +8,7 @@ function LoginHostPage({ setIsHostAuthenticated }) {
     const handleInputChange = (name, value) => {
         setFormData((prevData) => ({ ...prevData, [name]: value }));
     };
-
+    // обработка авторизации ведущего
     const handleLogin = (e) => {
         e.preventDefault();
         console.log('Host login data:', formData);

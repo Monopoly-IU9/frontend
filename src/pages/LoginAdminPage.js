@@ -9,18 +9,19 @@ function LoginAdminPage({ setIsAdminAuthenticated }) {
         setFormData((prevData) => ({ ...prevData, [name]: value }));
     };
 
+    // обработка авторизации админа
     const handleLogin = (e) => {
         e.preventDefault();
         console.log('Admin login data:', formData);
         setIsAdminAuthenticated(true);
         navigate('/admin');
     };
-
+    // поля для формы авторизации
     const fields = [
         { name: 'username', label: 'Username', placeholder: 'Enter username', required: true },
         { name: 'password', label: 'Password', type: 'password', placeholder: 'Enter password', required: true }
     ];
-
+    // кнопки для формы авторизации
     const buttons = [
         { type: 'submit', label: 'Login', onClick: handleLogin },
     ]

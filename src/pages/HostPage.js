@@ -4,7 +4,7 @@ import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 // import { fetchGamesForHost } from '../api/GameAPI';
 
 function HostPage() {
-    // Временные данные-заглушки
+    // Временные данные
     const placeholderGames = [
         { id: 1, name: 'Активная Игра 1', isActive: true },
         { id: 2, name: 'Активная Игра 2', isActive: true },
@@ -18,7 +18,7 @@ function HostPage() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        // Разделение игр из заглушек на активные и неактивные
+        // Разделение игр на активные и неактивные
         setActiveGames(placeholderGames.filter(game => game.isActive));
         setInactiveGames(placeholderGames.filter(game => !game.isActive));
     }, []);

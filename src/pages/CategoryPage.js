@@ -5,6 +5,7 @@ import {Button, ListGroup} from 'react-bootstrap';
 import {Link, useNavigate} from 'react-router-dom';
 
 function CategoryPage() {
+    // Временные данные
     const [name, setName] = useState('Category 1');
     const [color, setColor] = useState('#0000FF');
     const [cards, setCards] = useState([
@@ -12,11 +13,15 @@ function CategoryPage() {
         {id: 2, description: 'Пример карточки 2', tags: ['tag2', 'tag3']},
         {id: 3, description: 'Пример карточки 3', tags: ['tag1']}
     ]);
+    // хранилище наборов
     const [sets, setSets] = useState([]);
+    // Статус модальных окон
     const [showModal, setShowModal] = useState(false);
     const [showSetModal, setShowSetModal] = useState(false);
+    // храним выбранные карточки
     const [selectedCard, setSelectedCard] = useState(null);
     const [selectedSet, setSelectedSet] = useState(null);
+    // навигация по страницам
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -24,37 +29,39 @@ function CategoryPage() {
         setSets([{id: 0, name: 'Главный набор', cards: cards, isMain: true}]);
     }, [cards]);
 
+    // обработка изменения категории
     const handleUpdateCategory = () => {
         navigate(`/admin/categories`);
     };
 
+    // обработка удаления категории
     const handleDeleteCategory = () => {
         navigate(`/admin/categories`);
     };
-
+    // обработка добавления новой карточки
     const handleAddCard = (newCard) => {
         setCards([...cards, {...newCard, id: Date.now()}]);
     };
-
+    // обработка изменения карточки
     const handleEditCard = (updatedCard) => {
         setCards(cards.map((card) => (card.id === updatedCard.id ? updatedCard : card)));
     };
-
+    // обработка удаления категории
     const handleDeleteCard = (id) => {
         setCards(cards.filter((card) => card.id !== id));
     };
-
+    // обработка создания набора
     const handleAddSet = (newSet) => {
         setSets([...sets, {...newSet, id: Date.now()}]);
         console.log(sets);
     };
-
+    // обработка изменения набора
     const handleEditSet = (updatedSet) => {
         setSets(
             sets.map((set) => (set.id === updatedSet.id ? updatedSet : set))
         );
     };
-
+    // обработка удаления набора
     const handleDeleteSet = (id) => {
         setSets(sets.filter((set) => set.id !== id || set.isMain));
     };

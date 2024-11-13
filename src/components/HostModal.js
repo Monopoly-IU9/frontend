@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
-
+// модальное окно для выбора ведущего в игре
 function HostModal({ show, onHide, hostLogin, setHostLogin, hostPassword, setHostPassword }) {
     const handleSave = () => {
         onHide(); // Закрываем модальное окно после сохранения

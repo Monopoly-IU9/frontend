@@ -1,7 +1,7 @@
 import React from 'react';
 import { Navbar, Nav, Container } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-
+// шаблон навигационного меню
 function CustomNavbar() {
     return (
         <Navbar bg="primary" variant="dark" expand="lg">

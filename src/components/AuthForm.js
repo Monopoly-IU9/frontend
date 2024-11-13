@@ -2,7 +2,9 @@ import React from 'react';
 import { Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+// шаблон для формы авторизации
 function AuthForm({ fields, buttons, onSubmit }) {
+    // обработка изменения
     const handleChange = (e, fieldName) => {
         const { value } = e.target;
         if (onSubmit) onSubmit(fieldName, value);
