@@ -5,11 +5,11 @@ import { BASE_URL } from './config';
 axios.interceptors.request.use((config) => {
     const adminToken = localStorage.getItem('adminToken');
     const hostToken = localStorage.getItem('hostToken');
-    if (adminToken && config.url.includes('/admin')) {
+    if (adminToken && config.url.includes('/admin/')) {
         config.headers.Authorization = `Bearer ${adminToken}`;
         console.log("В роли администратора");
         console.log(config.url);
-    } else if (hostToken && config.url.includes('/host')) {
+    } else if (hostToken && config.url.includes('/host/')) {
         config.headers.Authorization = `Bearer ${hostToken}`;
         console.log("В роли ведущего");
         console.log(config.url);
@@ -28,3 +28,8 @@ export const checkAdminAuth = () =>
 
 export const checkHostAuth = () =>
     axios.post(`${BASE_URL}/host/checkAuth`);
+
+// Ручка для создания ведущего
+export const createHost = (login, password) => {
+    return axios.post(`${BASE_URL}/admin/createHost`, { login, password });
+};

@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import HomePage from './pages/HomePage';
 import LoginAdminPage from './pages/LoginAdminPage';
 import AdminPage from './pages/AdminPage';
+import ManageHostsPage from './pages/ManageHostsPage';
 import LoginHostPage from './pages/LoginHostPage';
 import HostPage from './pages/HostPage';
 import GamePage from './pages/GamePage';
@@ -80,6 +81,10 @@ function App() {
                 <Route
                     path="/admin/category"
                     element={isAdminAuthenticated ? <CategoryPage /> : <Navigate to="/admin-login" />}
+                />
+                <Route
+                    path="/admin/hosts"
+                    element={isAdminAuthenticated ? <ManageHostsPage /> : <Navigate to="/admin-login" />}
                 />
                 <Route
                     path="/admin/new-game"

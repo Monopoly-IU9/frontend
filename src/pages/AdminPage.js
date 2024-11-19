@@ -13,6 +13,9 @@ function AdminPage() {
                 <button className="btn btn-primary" onClick={() => navigate('/admin/categories')}>
                     Управление категориями
                 </button>
+                <button className="btn btn-primary" onClick={() => navigate('/admin/hosts')}>
+                    Управление ведущими
+                </button>
                 <button className="btn btn-secondary" onClick={() => navigate('/admin/new-game')}>
                     Создать новый шаблон игры
                 </button>
