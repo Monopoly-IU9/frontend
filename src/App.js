@@ -15,16 +15,8 @@ import EditGameTemplate from './pages/EditGameTemplatePage';
 import GameSettingsPage from "./pages/GameSettingsPage";
 
 function App() {
-    const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
-    const [isHostAuthenticated, setIsHostAuthenticated] = useState(false);
-
-    // Проверка токенов при загрузке приложения
-    useEffect(() => {
-        const adminToken = localStorage.getItem('adminToken');
-        const hostToken = localStorage.getItem('hostToken');
-        if (adminToken) setIsAdminAuthenticated(true);
-        if (hostToken) setIsHostAuthenticated(true);
-    }, []);
+    const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(!!localStorage.getItem('adminToken'));
+    const [isHostAuthenticated, setIsHostAuthenticated] = useState(!!localStorage.getItem('hostToken'));
 
     return (
         <Router>

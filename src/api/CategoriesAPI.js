@@ -3,7 +3,7 @@ import { BASE_URL } from './config';
 
 // Получение списка всех категорий
 export const getCategories = async () => {
-    const response = await axios.get(`${BASE_URL}/getCategories`);
+    const response = await axios.get(`${BASE_URL}/admin/getCategories`);
     return response.data;
 };
 

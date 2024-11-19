@@ -16,6 +16,7 @@ function LoginAdminPage({ setIsAdminAuthenticated }) {
         e.preventDefault();
         try {
             const response = await loginAdmin(formData.username, formData.password);
+            console.log(response);
             localStorage.setItem('adminToken', response.data.access_token);
             setIsAdminAuthenticated(true);
             navigate('/admin');
