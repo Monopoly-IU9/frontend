@@ -57,6 +57,7 @@ function App() {
             <CustomNavbar />
             <Routes>
                 <Route path="/" element={<Navigate to="/home" />} />
+                <Route path="*" element={<Navigate to="/home" />} />
                 <Route path="/home" element={<HomePage />} />
 
                 {/* Администраторские маршруты */}
@@ -92,7 +93,7 @@ function App() {
                 {/* Ведущие и игры */}
                 <Route
                     path="/login"
-                    element={<LoginHostPage setIsHostAuthenticated={setIsHostAuthenticated} />}
+                    element={!isHostAuthenticated ? <LoginHostPage setIsHostAuthenticated={setIsHostAuthenticated} /> : <Navigate to="/games" />}
                 />
                 <Route
                     path="/games"
