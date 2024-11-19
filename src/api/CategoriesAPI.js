@@ -9,7 +9,7 @@ export const getCategories = async () => {
 
 // Создание новой категории
 export const createCategory = async (name, color) => {
-    const response = await axios.post(`${BASE_URL}/createCategory`, { name, color });
+    const response = await axios.post(`${BASE_URL}/admin/createCategory`, { name, color });
     return response.data;
 };
 
