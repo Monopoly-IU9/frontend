@@ -18,3 +18,9 @@ export const deleteCategory = async (categoryId) => {
     const response = await axios.post(`${BASE_URL}/admin/deleteCategory?category_id=${categoryId}`);
     return response.data;
 };
+
+// Получение данных категории по ID
+export const getCategoryData = async (categoryId) => {
+    const response = await axios.get(`${BASE_URL}/admin/getCategoryData?category_id=${categoryId}`);
+    return response.data;
+};
