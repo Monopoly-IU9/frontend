@@ -24,3 +24,10 @@ export const getCategoryData = async (categoryId) => {
     const response = await axios.get(`${BASE_URL}/admin/getCategoryData?category_id=${categoryId}`);
     return response.data;
 };
+
+// Редактирование категории по ID
+export const editCategory = async (categoryId) => {
+    const response = await axios.post(`${BASE_URL}/admin/editCategory?category_id=${categoryId}`);
+    return response.data;
+};
+
