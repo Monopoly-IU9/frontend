@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import LoginAdminPage from './pages/LoginAdminPage';
@@ -17,6 +17,14 @@ import GameSettingsPage from "./pages/GameSettingsPage";
 function App() {
     const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
     const [isHostAuthenticated, setIsHostAuthenticated] = useState(false);
+
+    // Проверка токенов при загрузке приложения
+    useEffect(() => {
+        const adminToken = localStorage.getItem('adminToken');
+        const hostToken = localStorage.getItem('hostToken');
+        if (adminToken) setIsAdminAuthenticated(true);
+        if (hostToken) setIsHostAuthenticated(true);
+    }, []);
 
     return (
         <Router>
