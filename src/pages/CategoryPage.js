@@ -7,7 +7,7 @@ import { getCategoryData, deleteCategory } from '../api/CategoriesAPI';
 
 function CategoryPage() {
     const [name, setName] = useState('');
-    const [color, setColor] = useState('#000000');
+    const [color, setColor] = useState('#FFFFFF');
     const [cards, setCards] = useState([]);
     const [sets, setSets] = useState([]);
     // Статус модальных окон
