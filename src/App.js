@@ -6,17 +6,51 @@ import AdminPage from './pages/AdminPage';
 import LoginHostPage from './pages/LoginHostPage';
 import HostPage from './pages/HostPage';
 import GamePage from './pages/GamePage';
-import CustomNavbar from "./components/Navbar";
+import CustomNavbar from './components/Navbar';
 import AdminCategories from './pages/CategoriesPage';
 import NewCategory from './pages/NewCategoryPage';
 import CategoryPage from './pages/CategoryPage';
 import NewGameTemplate from './pages/NewGameTemplatePage';
 import EditGameTemplate from './pages/EditGameTemplatePage';
-import GameSettingsPage from "./pages/GameSettingsPage";
+import GameSettingsPage from './pages/GameSettingsPage';
+import {checkAdminAuth, checkHostAuth} from "./api/AuthAPI";
 
 function App() {
-    const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(!!localStorage.getItem('adminToken'));
-    const [isHostAuthenticated, setIsHostAuthenticated] = useState(!!localStorage.getItem('hostToken'));
+    const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
+    const [isHostAuthenticated, setIsHostAuthenticated] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        const checkAuth = async () => {
+            setIsLoading(true);
+
+            const adminToken = localStorage.getItem('adminToken');
+            const hostToken = localStorage.getItem('hostToken');
+
+            const adminPromise = adminToken
+                ? checkAdminAuth().then(() => setIsAdminAuthenticated(true)).catch(() => {
+                    localStorage.removeItem('adminToken');
+                    setIsAdminAuthenticated(false);
+                })
+                : Promise.resolve();
+
+            const hostPromise = hostToken
+                ? checkHostAuth().then(() => setIsHostAuthenticated(true)).catch(() => {
+                    localStorage.removeItem('hostToken');
+                    setIsHostAuthenticated(false);
+                })
+                : Promise.resolve();
+
+            await Promise.all([adminPromise, hostPromise]);
+            setIsLoading(false);
+        };
+
+        checkAuth();
+    }, []);
+
+    if (isLoading) {
+        return <div>Loading...</div>; // Показываем индикатор загрузки
+    }
 
     return (
         <Router>
