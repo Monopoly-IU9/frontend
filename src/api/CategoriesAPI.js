@@ -15,6 +15,6 @@ export const createCategory = async (name, color) => {
 
 // Удаление категории по ID
 export const deleteCategory = async (categoryId) => {
-    const response = await axios.post(`${BASE_URL}/deleteCategory`, { categoryId });
+    const response = await axios.post(`${BASE_URL}/admin/deleteCategory?category_id=${categoryId}`);
     return response.data;
 };

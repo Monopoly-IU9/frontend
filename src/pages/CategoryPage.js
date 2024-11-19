@@ -1,17 +1,18 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import CategoryModal from '../components/CategoryModal';
 import SetModal from '../components/SetModal';
-import {Button, ListGroup} from 'react-bootstrap';
-import {Link, useNavigate} from 'react-router-dom';
+import { Button, ListGroup } from 'react-bootstrap';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { deleteCategory } from '../api/CategoriesAPI';
 
 function CategoryPage() {
     // Временные данные
     const [name, setName] = useState('Category 1');
     const [color, setColor] = useState('#0000FF');
     const [cards, setCards] = useState([
-        {id: 1, description: 'Пример карточки 1', tags: ['tag1', 'tag2']},
-        {id: 2, description: 'Пример карточки 2', tags: ['tag2', 'tag3']},
-        {id: 3, description: 'Пример карточки 3', tags: ['tag1']}
+        { id: 1, description: 'Пример карточки 1', tags: ['tag1', 'tag2'] },
+        { id: 2, description: 'Пример карточки 2', tags: ['tag2', 'tag3'] },
+        { id: 3, description: 'Пример карточки 3', tags: ['tag1'] },
     ]);
     // хранилище наборов
     const [sets, setSets] = useState([]);
@@ -23,6 +24,9 @@ function CategoryPage() {
     const [selectedSet, setSelectedSet] = useState(null);
     // навигация по страницам
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+
+    const categoryId = searchParams.get('id'); // Получаем ID категории из URL
 
     useEffect(() => {
         // Главный набор, содержащий все карточки категории
@@ -34,13 +38,21 @@ function CategoryPage() {
         navigate(`/admin/categories`);
     };
 
-    // обработка удаления категории
-    const handleDeleteCategory = () => {
-        navigate(`/admin/categories`);
+    const handleDeleteCategory = async () => {
+        if (!categoryId) {
+            console.error('ID категории не найден');
+            return;
+        }
+        try {
+            await deleteCategory(categoryId); // Вызов API для удаления
+            navigate(`/admin/categories`); // Возврат на страницу категорий после удаления
+        } catch (error) {
+            console.error('Ошибка при удалении категории:', error);
+        }
     };
     // обработка добавления новой карточки
     const handleAddCard = (newCard) => {
-        setCards([...cards, {...newCard, id: Date.now()}]);
+        setCards([...cards, { ...newCard, id: Date.now() }]);
     };
     // обработка изменения карточки
     const handleEditCard = (updatedCard) => {
@@ -52,8 +64,7 @@ function CategoryPage() {
     };
     // обработка создания набора
     const handleAddSet = (newSet) => {
-        setSets([...sets, {...newSet, id: Date.now()}]);
-        console.log(sets);
+        setSets([...sets, { ...newSet, id: Date.now() }]);
     };
     // обработка изменения набора
     const handleEditSet = (updatedSet) => {
@@ -101,7 +112,6 @@ function CategoryPage() {
                 Добавить карточку
             </Button>
 
-
             <CategoryModal
                 show={showModal}
                 onClose={() => setShowModal(false)}
@@ -144,7 +154,6 @@ function CategoryPage() {
                 set={selectedSet}
                 cards={cards}
             />
-
 
             <ListGroup className="mb-4">
                 {sets.map((set) => (
