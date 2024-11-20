@@ -32,14 +32,14 @@ function ManageHostsPage() {
     };
 
     const handleEditHost = (host) => {
-        setCurrentHost(host);
+        setCurrentHost({ ...host });
         setShowModal(true);
     };
 
     const handleSaveHost = async () => {
         try {
-            if (currentHost) {
-                // Редактирование ведущего
+            if (currentHost?.id) {
+                // Редактирование существующего ведущего
                 await editHost(currentHost.id, currentHost.login, currentHost.password);
                 setHosts((prevHosts) =>
                     prevHosts.map((h) => (h.id === currentHost.id ? currentHost : h))
@@ -47,7 +47,7 @@ function ManageHostsPage() {
             } else {
                 // Добавление нового ведущего
                 await createHost(currentHost.login, currentHost.password);
-                loadHosts();
+                loadHosts(); // Перезагружаем список
             }
         } catch (error) {
             console.error('Ошибка при сохранении ведущего:', error);
@@ -56,7 +56,7 @@ function ManageHostsPage() {
 
     const handleDeleteHost = async () => {
         try {
-            if (currentHost) {
+            if (currentHost?.id) {
                 await deleteHost(currentHost.id);
                 setHosts((prevHosts) => prevHosts.filter((h) => h.id !== currentHost.id));
             }
@@ -114,7 +114,7 @@ function ManageHostsPage() {
                 }
                 onSave={handleSaveHost}
                 onDelete={handleDeleteHost}
-                isEditing={!!currentHost}
+                isEditing={!!currentHost?.id}
             />
         </div>
     );
