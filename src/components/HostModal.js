@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 
 function HostModal({
@@ -10,8 +10,10 @@ function HostModal({
                        setHostPassword,
                        onSave,
                        onDelete,
-                       isEditing
+                       isEditing,
                    }) {
+    const [passwordVisible, setPasswordVisible] = useState(false);
+
     const handleSave = () => {
         onSave();
         onHide(); // Закрываем модальное окно после сохранения
@@ -20,6 +22,10 @@ function HostModal({
     const handleDelete = () => {
         if (onDelete) onDelete();
         onHide(); // Закрываем модальное окно после удаления
+    };
+
+    const togglePasswordVisibility = () => {
+        setPasswordVisible(!passwordVisible);
     };
 
     return (
@@ -40,11 +46,23 @@ function HostModal({
                 <div className="mb-3">
                     <label className="form-label">Пароль ведущего</label>
                     <input
-                        type="password"
+                        type={passwordVisible ? 'text' : 'password'}
                         className="form-control"
                         value={hostPassword}
                         onChange={(e) => setHostPassword(e.target.value)}
                     />
+                    <div className="form-check mt-2">
+                        <input
+                            type="checkbox"
+                            className="form-check-input"
+                            id="show-password"
+                            checked={passwordVisible}
+                            onChange={togglePasswordVisibility}
+                        />
+                        <label className="form-check-label" htmlFor="show-password">
+                            Показать пароль
+                        </label>
+                    </div>
                 </div>
             </Modal.Body>
             <Modal.Footer>
