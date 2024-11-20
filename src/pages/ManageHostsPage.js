@@ -1,76 +1,121 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Container, ListGroup, Row, Col } from 'react-bootstrap';
+import { ListGroup, Button } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import HostModal from '../components/HostModal';
-import { createHost } from '../api/AuthAPI';
-import {Link} from "react-router-dom";
+import { createHost, getHosts, editHost, deleteHost } from '../api/HostsAPI';
 
 function ManageHostsPage() {
     const [hosts, setHosts] = useState([]); // Список ведущих
     const [showModal, setShowModal] = useState(false); // Состояние модального окна
-    const [hostLogin, setHostLogin] = useState(''); // Логин ведущего
-    const [hostPassword, setHostPassword] = useState(''); // Пароль ведущего
-    const [loading, setLoading] = useState(true);
+    const [currentHost, setCurrentHost] = useState(null); // Текущий ведущий (для редактирования)
+    const [loading, setLoading] = useState(true); // Загрузка данных
 
-    // Загрузка списка ведущих
-    // useEffect(() => {
-    //     const fetchHosts = async () => {
-    //         try {
-    //             const response = await getHosts();
-    //             setHosts(response.data); // Установим ведущих из API
-    //         } catch (error) {
-    //             console.error('Ошибка при загрузке ведущих:', error);
-    //         }
-    //     };
-    //
-    //     fetchHosts();
-    // }, []);
+    useEffect(() => {
+        loadHosts();
+    }, []);
 
-    // Добавление нового ведущего
+    const loadHosts = async () => {
+        setLoading(true);
+        try {
+            const response = await getHosts();
+            setHosts(response.data);
+        } catch (error) {
+            console.error('Ошибка при загрузке ведущих:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleAddHost = () => {
+        setCurrentHost(null);
+        setShowModal(true);
+    };
+
+    const handleEditHost = (host) => {
+        setCurrentHost(host);
+        setShowModal(true);
+    };
+
     const handleSaveHost = async () => {
         try {
-            await createHost(hostLogin, hostPassword);
-            setHosts([...hosts, { login: hostLogin }]); // Добавляем нового ведущего в список
-            setHostLogin(''); // Сбрасываем поля ввода
-            setHostPassword('');
+            if (currentHost) {
+                // Редактирование ведущего
+                await editHost(currentHost.id, currentHost.login, currentHost.password);
+                setHosts((prevHosts) =>
+                    prevHosts.map((h) => (h.id === currentHost.id ? currentHost : h))
+                );
+            } else {
+                // Добавление нового ведущего
+                await createHost(currentHost.login, currentHost.password);
+                loadHosts();
+            }
         } catch (error) {
-            console.error('Ошибка при добавлении ведущего:', error);
+            console.error('Ошибка при сохранении ведущего:', error);
+        }
+    };
+
+    const handleDeleteHost = async () => {
+        try {
+            if (currentHost) {
+                await deleteHost(currentHost.id);
+                setHosts((prevHosts) => prevHosts.filter((h) => h.id !== currentHost.id));
+            }
+        } catch (error) {
+            console.error('Ошибка при удалении ведущего:', error);
         }
     };
 
     return (
         <div className="container my-4 bg-light rounded p-4 shadow-sm">
-            <Link to="/admin" className="btn btn-outline-secondary mb-3">Назад</Link>
+            <Link to="/admin" className="btn btn-outline-secondary mb-3">
+                Назад
+            </Link>
             <h1 className="mb-4">Ведущие</h1>
 
             <div className="d-flex flex-column gap-3">
-                <button
-                    className="btn btn-primary mb-4"
-                    onClick={() => setShowModal(true)}
-                >
-                    Задать нового ведущего
+                <button className="btn btn-primary mb-4" onClick={handleAddHost}>
+                    Добавить ведущего
                 </button>
             </div>
-            <HostModal
-                show={showModal}
-                onHide={() => setShowModal(false)}
-                hostLogin={hostLogin}
-                setHostLogin={setHostLogin}
-                hostPassword={hostPassword}
-                setHostPassword={setHostPassword}
-                onSave={handleSaveHost}
-            />
+
             <h2>Существующие ведущие</h2>
             {loading ? (
-                <p>Загрузка Ведущих...</p>
+                <p>Загрузка ведущих...</p>
             ) : (
                 <ListGroup className="mb-4">
-                    {hosts.map((host, index) => (
-                        <ListGroup.Item key={index} className="d-flex justify-content-between align-items-center">
-                            {host.login}
+                    {hosts.map((host) => (
+                        <ListGroup.Item
+                            key={host.id}
+                            className="d-flex justify-content-between align-items-center"
+                        >
+                            <span>{host.login}</span>
+                            <Button
+                                variant="outline-primary"
+                                size="sm"
+                                onClick={() => handleEditHost(host)}
+                            >
+                                Изменить
+                            </Button>
                         </ListGroup.Item>
                     ))}
                 </ListGroup>
             )}
+
+            <HostModal
+                show={showModal}
+                onHide={() => setShowModal(false)}
+                hostLogin={currentHost?.login || ''}
+                setHostLogin={(login) =>
+                    setCurrentHost((prev) => ({ ...prev, login }))
+                }
+                hostPassword={currentHost?.password || ''}
+                setHostPassword={(password) =>
+                    setCurrentHost((prev) => ({ ...prev, password }))
+                }
+                onSave={handleSaveHost}
+                onDelete={handleDeleteHost}
+                isEditing={!!currentHost}
+            />
         </div>
     );
 }

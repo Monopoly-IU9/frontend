@@ -1,16 +1,31 @@
 import React, { useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
-// модальное окно для выбора ведущего в игре
-function HostModal({ show, onHide, hostLogin, setHostLogin, hostPassword, setHostPassword, onSave}) {
+
+function HostModal({
+                       show,
+                       onHide,
+                       hostLogin,
+                       setHostLogin,
+                       hostPassword,
+                       setHostPassword,
+                       onSave,
+                       onDelete,
+                       isEditing
+                   }) {
     const handleSave = () => {
         onSave();
         onHide(); // Закрываем модальное окно после сохранения
     };
 
+    const handleDelete = () => {
+        if (onDelete) onDelete();
+        onHide(); // Закрываем модальное окно после удаления
+    };
+
     return (
         <Modal show={show} onHide={onHide} centered>
             <Modal.Header closeButton>
-                <Modal.Title>Настроить ведущего</Modal.Title>
+                <Modal.Title>{isEditing ? 'Редактировать ведущего' : 'Добавить ведущего'}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <div className="mb-3">
@@ -33,8 +48,13 @@ function HostModal({ show, onHide, hostLogin, setHostLogin, hostPassword, setHos
                 </div>
             </Modal.Body>
             <Modal.Footer>
+                {isEditing && (
+                    <Button variant="danger" onClick={handleDelete}>
+                        Удалить
+                    </Button>
+                )}
                 <Button variant="primary" onClick={handleSave}>
-                    Сохранить
+                    {isEditing ? 'Сохранить изменения' : 'Сохранить'}
                 </Button>
             </Modal.Footer>
         </Modal>

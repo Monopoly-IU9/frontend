@@ -28,8 +28,3 @@ export const checkAdminAuth = () =>
 
 export const checkHostAuth = () =>
     axios.post(`${BASE_URL}/host/checkAuth`);
-
-// Ручка для создания ведущего
-export const createHost = (login, password) => {
-    return axios.post(`${BASE_URL}/admin/createHost`, { login, password });
-};
