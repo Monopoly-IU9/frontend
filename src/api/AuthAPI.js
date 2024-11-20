@@ -28,3 +28,7 @@ export const checkAdminAuth = () =>
 
 export const checkHostAuth = () =>
     axios.post(`${BASE_URL}/host/checkAuth`);
+
+export const hostLogout = (token) =>
+    axios.get(`${BASE_URL}/host/logout?token=${token}`);
+

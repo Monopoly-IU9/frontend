@@ -55,7 +55,10 @@ function App() {
 
     return (
         <Router>
-            <CustomNavbar />
+            <CustomNavbar
+                isHostAuthenticated={isHostAuthenticated}
+                setIsHostAuthenticated={setIsHostAuthenticated}
+            />
             <Routes>
                 <Route path="/" element={<Navigate to="/home" />} />
                 <Route path="*" element={<Navigate to="/home" />} />
