@@ -1,19 +1,14 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import CategoryModal from '../components/CategoryModal';
 import SetModal from '../components/SetModal';
-import {Button, ListGroup} from 'react-bootstrap';
-import {Link, useNavigate} from 'react-router-dom';
+import { Button, ListGroup } from 'react-bootstrap';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { getCategoryData, deleteCategory } from '../api/CategoriesAPI';
 
 function CategoryPage() {
-    // Временные данные
-    const [name, setName] = useState('Category 1');
-    const [color, setColor] = useState('#0000FF');
-    const [cards, setCards] = useState([
-        {id: 1, description: 'Пример карточки 1', tags: ['tag1', 'tag2']},
-        {id: 2, description: 'Пример карточки 2', tags: ['tag2', 'tag3']},
-        {id: 3, description: 'Пример карточки 3', tags: ['tag1']}
-    ]);
-    // хранилище наборов
+    const [name, setName] = useState('');
+    const [color, setColor] = useState('#FFFFFF');
+    const [cards, setCards] = useState([]);
     const [sets, setSets] = useState([]);
     // Статус модальных окон
     const [showModal, setShowModal] = useState(false);
@@ -23,24 +18,47 @@ function CategoryPage() {
     const [selectedSet, setSelectedSet] = useState(null);
     // навигация по страницам
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const categoryId = searchParams.get('id');
 
     useEffect(() => {
-        // Главный набор, содержащий все карточки категории
-        setSets([{id: 0, name: 'Главный набор', cards: cards, isMain: true}]);
-    }, [cards]);
+        if (categoryId) {
+            fetchCategoryData();
+        }
+    }, [categoryId]);
+
+    const fetchCategoryData = async () => {
+        try {
+            const data = await getCategoryData(categoryId);
+            setName(data.name);
+            setColor(`#${data.color}`);
+            setCards(data.cards);
+            setSets(data.sets);
+        } catch (error) {
+            console.error('Ошибка при загрузке данных категории:', error);
+        }
+    };
 
     // обработка изменения категории
     const handleUpdateCategory = () => {
         navigate(`/admin/categories`);
-    };
+    }
 
-    // обработка удаления категории
-    const handleDeleteCategory = () => {
-        navigate(`/admin/categories`);
+    const handleDeleteCategory = async () => {
+        if (!categoryId) {
+            console.error('ID категории не найден');
+            return;
+        }
+        try {
+            await deleteCategory(categoryId); // Вызов API для удаления
+            navigate(`/admin/categories`); // Возврат на страницу категорий после удаления
+        } catch (error) {
+            console.error('Ошибка при удалении категории:', error);
+        }
     };
     // обработка добавления новой карточки
     const handleAddCard = (newCard) => {
-        setCards([...cards, {...newCard, id: Date.now()}]);
+        setCards([...cards, { ...newCard, id: Date.now() }]);
     };
     // обработка изменения карточки
     const handleEditCard = (updatedCard) => {
@@ -52,18 +70,15 @@ function CategoryPage() {
     };
     // обработка создания набора
     const handleAddSet = (newSet) => {
-        setSets([...sets, {...newSet, id: Date.now()}]);
-        console.log(sets);
+        setSets([...sets, { ...newSet, id: Date.now() }]);
     };
     // обработка изменения набора
     const handleEditSet = (updatedSet) => {
-        setSets(
-            sets.map((set) => (set.id === updatedSet.id ? updatedSet : set))
-        );
+        setSets(sets.map((set) => (set.id === updatedSet.id ? updatedSet : set)));
     };
     // обработка удаления набора
     const handleDeleteSet = (id) => {
-        setSets(sets.filter((set) => set.id !== id || set.isMain));
+        setSets(sets.filter((set) => set.id !== id));
     };
 
     return (
@@ -93,14 +108,15 @@ function CategoryPage() {
 
             {/* Список карточек */}
             <h4>Карточки</h4>
-            {/* Кнопка добавления карточки */}
-            <Button onClick={() => {
-                setShowModal(true);
-                setSelectedCard(null);
-            }} className="btn btn-primary mb-2">
+            <Button
+                onClick={() => {
+                    setShowModal(true);
+                    setSelectedCard(null);
+                }}
+                className="btn btn-primary mb-2"
+            >
                 Добавить карточку
             </Button>
-
 
             <CategoryModal
                 show={showModal}
@@ -129,11 +145,13 @@ function CategoryPage() {
 
             {/* Список наборов */}
             <h4>Наборы</h4>
-            {/* Кнопка добавления набора */}
-            <Button onClick={() => {
-                setShowSetModal(true);
-                setSelectedSet(null);
-            }} className="btn btn-primary mb-2">
+            <Button
+                onClick={() => {
+                    setShowSetModal(true);
+                    setSelectedSet(null);
+                }}
+                className="btn btn-primary mb-2"
+            >
                 Добавить набор
             </Button>
 
@@ -145,7 +163,6 @@ function CategoryPage() {
                 cards={cards}
             />
 
-
             <ListGroup className="mb-4">
                 {sets.map((set) => (
                     <ListGroup.Item
@@ -153,25 +170,21 @@ function CategoryPage() {
                         className="d-flex justify-content-between align-items-center"
                         action
                         onClick={() => {
-                            if (!set.isMain) {
-                                setSelectedSet(set);
-                                setShowSetModal(true);
-                            }
+                            setSelectedSet(set);
+                            setShowSetModal(true);
                         }}
                     >
                         {set.name}
-                        {!set.isMain && (
-                            <Button
-                                variant="danger"
-                                size="sm"
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleDeleteSet(set.id);
-                                }}
-                            >
-                                Удалить
-                            </Button>
-                        )}
+                        <Button
+                            variant="danger"
+                            size="sm"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                handleDeleteSet(set.id);
+                            }}
+                        >
+                            Удалить
+                        </Button>
                     </ListGroup.Item>
                 ))}
             </ListGroup>

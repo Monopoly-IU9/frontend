@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
-import HostModal from '../components/HostModal';
 
 function EditGameTemplate() {
     const [searchParams] = useSearchParams();
@@ -12,9 +11,6 @@ function EditGameTemplate() {
     const [categories, setCategories] = useState([]);
     const [sets, setSets] = useState([]);
     const [tags, setTags] = useState([]);
-    const [hostLogin, setHostLogin] = useState('');
-    const [hostPassword, setHostPassword] = useState('');
-    const [showHostModal, setShowHostModal] = useState(false); // Состояние для отображения модального окна
 
     // Захардкоженные данные для симуляции
     const allCategories = [
@@ -35,8 +31,6 @@ function EditGameTemplate() {
         setCategories([]); // Изначально категории пусты
         setSets([]); // Изначально наборы пусты
         setTags(allTags); // Изначально выбираем все теги
-        setHostLogin('sampleHost');
-        setHostPassword('samplePassword');
     }, [gameId]);
 
     // Обновление выбора категории
@@ -144,21 +138,8 @@ function EditGameTemplate() {
                 </div>
             </div>
 
-            <Button variant="primary" className="mb-3" onClick={() => setShowHostModal(true)}>
-                Настроить ведущего
-            </Button>
-
             <Button onClick={handleUpdateGame} className="btn btn-success">Сохранить изменения</Button>
             <Button onClick={handleDeleteGame} className="btn btn-danger ms-2">Удалить игру</Button>
-
-            <HostModal
-                show={showHostModal}
-                onHide={() => setShowHostModal(false)}
-                hostLogin={hostLogin}
-                setHostLogin={setHostLogin}
-                hostPassword={hostPassword}
-                setHostPassword={setHostPassword}
-            />
         </div>
     );
 }

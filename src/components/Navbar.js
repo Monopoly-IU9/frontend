@@ -1,21 +1,35 @@
 import React from 'react';
-import { Navbar, Nav, Container } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-// шаблон навигационного меню
-function CustomNavbar() {
+import { Navbar, Nav, Container, Button } from 'react-bootstrap';
+import {Link, useNavigate} from 'react-router-dom';
+import { hostLogout } from '../api/AuthAPI';
+
+function CustomNavbar({ isHostAuthenticated, setIsHostAuthenticated }) {
+    const navigate = useNavigate();
+    const handleLogout = async () => {
+        const hostToken = localStorage.getItem('hostToken');
+        try {
+            await hostLogout(hostToken); // Вызов ручки для выхода
+            localStorage.removeItem('hostToken'); // Удаляем токен из локального хранилища
+            setIsHostAuthenticated(false); // Обновляем состояние
+            navigate('/home');
+        } catch (error) {
+            console.error('Ошибка при выходе:', error);
+        }
+    };
+
     return (
         <Navbar bg="primary" variant="dark" expand="lg">
             <Container>
                 <Navbar.Brand as={Link} to="/home">
                     Monopoly
                 </Navbar.Brand>
-                <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                <Navbar.Collapse id="basic-navbar-nav">
-                    <Nav className="me-auto">
-                        <Nav.Link as={Link} to="/home">Домой</Nav.Link>
-                        <Nav.Link as={Link} to="/login">Login</Nav.Link>
-                    </Nav>
-                </Navbar.Collapse>
+                <Nav className="ms-auto">
+                    {isHostAuthenticated && (
+                        <Nav.Link onClick={handleLogout}>
+                            Выйти
+                        </Nav.Link>
+                    )}
+                </Nav>
             </Container>
         </Navbar>
     );
