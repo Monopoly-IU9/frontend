@@ -50,7 +50,7 @@ function NewCategoryPage() {
                 </svg>
                 Категории
             </Link>
-            <h1 className="mb-4">Новая категория</h1>
+            <h2 className="mb-3">Новая категория</h2>
             {error && <div className="alert alert-danger">{error}</div>}
             <form onSubmit={handleCreateCategory}>
                 {/* Поле имени */}
