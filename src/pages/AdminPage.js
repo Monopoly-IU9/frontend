@@ -8,27 +8,54 @@ function AdminPage() {
 
     return (
         <div className="container my-4 bg-light rounded p-4 shadow-sm">
-            <h1 className="mb-4">Панель администратора</h1>
             <div className="d-flex flex-column gap-3">
-                <button className="btn btn-primary" onClick={() => navigate('/admin/categories')}>
-                    Управление категориями
+                <button className="btn btn-outline-primary" onClick={() => navigate('/admin/categories')}>
+                    Категории
                 </button>
                 <button className="btn btn-primary" onClick={() => navigate('/admin/hosts')}>
-                    Управление ведущими
-                </button>
-                <button className="btn btn-secondary" onClick={() => navigate('/admin/new-game')}>
-                    Создать новый шаблон игры
+                    Ведущие
                 </button>
             </div>
-            <h2 className="mt-5">Шаблоны игр</h2>
-            <ul className="list-group">
-                <li className="list-group-item d-flex justify-content-between align-items-center">
-                    Шаблон игры 1
-                    <button className="btn btn-sm btn-outline-primary" onClick={() => navigate('/admin/edit-game?id=1')}>
-                        Изменить
-                    </button>
-                </li>
-            </ul>
+
+            {/* Контент вкладок */}
+            <div className="tab-content" id="adminTabContent">
+                <div
+                    className="tab-pane fade"
+                    id="categories"
+                    role="tabpanel"
+                    aria-labelledby="categories-tab"
+                >
+                    <p>Контент для управления категориями.</p>
+                </div>
+                <div
+                    className="tab-pane fade show active"
+                    id="hosts"
+                    role="tabpanel"
+                    aria-labelledby="hosts-tab"
+                >
+
+                    <div className="d-flex justify-content-between align-items-center mb-3 mt-3">
+                        <h2>Игры</h2>
+                        <button
+                            className="btn btn-outline-primary btn-sm"
+                            onClick={() => navigate('/admin/new-game')}
+                        >
+                            +
+                        </button>
+                    </div>
+                    <ul className="list-group">
+                        {Array.from({length: 10}).map((_, index) => (
+                            <li
+                                key={index}
+                                className="list-group-item d-flex justify-content-between align-items-center"
+                                onClick={() => navigate('/admin/edit-game?id=1')}
+                            >
+                                Лукойл
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            </div>
         </div>
     );
 }
