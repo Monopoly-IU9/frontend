@@ -158,18 +158,36 @@ function CategoryPage() {
                 <div id="cards-collapse">
                     <ListGroup className="mb-4">
                         {cards.map((card) => (
-                            <ListGroup.Item key={card.id} className="d-flex justify-content-between align-items-center">
-                                <span onClick={() => {
-                                    setSelectedCard(card);
-                                    setShowModal(true);
-                                }}>{card.description}</span>
-                                <Button
-                                    variant="danger"
-                                    size="sm"
-                                    onClick={() => handleDeleteCard(card.id)}
-                                >
-                                    Удалить
-                                </Button>
+                            <ListGroup.Item key={card.id} className="p-0 border-0">
+                                <div className="card">
+                                    <div className="card-body">
+                                        <h5 className="card-title">{categoryId + "." + card.id}</h5>
+                                        <p
+                                            className="card-text"
+                                            onClick={() => {
+                                                setSelectedCard(card);
+                                                setShowModal(true);
+                                            }}
+                                            style={{
+                                                display: '-webkit-box',
+                                                WebkitLineClamp: 3,
+                                                WebkitBoxOrient: 'vertical',
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                                whiteSpace: 'normal',
+                                            }}
+                                        >
+                                            {card.description}
+                                        </p>
+                                        <Button
+                                            variant="danger"
+                                            size="sm"
+                                            onClick={() => handleDeleteCard(card.id)}
+                                        >
+                                            Удалить
+                                        </Button>
+                                    </div>
+                                </div>
                             </ListGroup.Item>
                         ))}
                     </ListGroup>
@@ -204,7 +222,6 @@ function CategoryPage() {
             </h4>
 
 
-
             <Collapse in={openSets}>
                 <div id="sets-collapse">
                     <ListGroup className="mb-4">
@@ -219,16 +236,16 @@ function CategoryPage() {
                                 }}
                             >
                                 {set.name}
-                                    <Button
-                                        variant="danger"
-                                        size="sm"
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            handleDeleteSet(set.id);
-                                        }}
-                                    >
-                                        Удалить
-                                    </Button>
+                                <Button
+                                    variant="danger"
+                                    size="sm"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleDeleteSet(set.id);
+                                    }}
+                                >
+                                    Удалить
+                                </Button>
                             </ListGroup.Item>
                         ))}
                     </ListGroup>
@@ -250,6 +267,7 @@ function CategoryPage() {
                 onSave={(set) => selectedSet ? handleEditSet(set) : handleAddSet(set)}
                 set={selectedSet}
                 cards={cards}
+                categoryId={categoryId}
             />
             {/* Кнопка сохранения изменений */}
             <button onClick={handleUpdateCategory} className="btn btn-primary mt-3 w-100">

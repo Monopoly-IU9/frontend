@@ -3,7 +3,7 @@ import { Modal, Button, Form, ListGroup } from 'react-bootstrap';
 
 
 // модальное окно для создания или изменения набора
-function SetModal({ show, onClose, onSave, set, cards }) {
+function SetModal({ show, onClose, onSave, set, cards, categoryId }) {
     const [name, setName] = useState('');
     const [selectedCards, setSelectedCards] = useState([]);
 
@@ -20,15 +20,20 @@ function SetModal({ show, onClose, onSave, set, cards }) {
     // обработка выбора карточек
     const handleCardSelection = (card) => {
         setSelectedCards(
-            selectedCards.includes(card)
-                ? selectedCards.filter((c) => c !== card)
+            selectedCards.find((c) => c.id === card.id)
+                ? selectedCards.filter((c) => c.id !== card.id)
                 : [...selectedCards, card]
         );
     };
 
     // обработка сохранения изменений
     const handleSave = () => {
-        onSave({ id: set ? set.id : Date.now(), name, cards: selectedCards, isMain: false });
+        onSave({
+            id: set ? set.id : Date.now(),
+            name,
+            cards: selectedCards,
+            isMain: false,
+        });
         onClose();
     };
 
@@ -54,11 +59,16 @@ function SetModal({ show, onClose, onSave, set, cards }) {
                         {cards.map((card) => (
                             <ListGroup.Item
                                 key={card.id}
-                                active={selectedCards.includes(card)}
+                                active={selectedCards.some((selected) => selected.id === card.id)}
                                 onClick={() => handleCardSelection(card)}
                                 style={{ cursor: 'pointer' }}
                             >
-                                {card.description}
+                                <div className="d-flex flex-column">
+                                    <h5 className="mb-1">{categoryId + "." + card.id}</h5>
+                                    <p className="mb-0 text-truncate">
+                                        {card.description}
+                                    </p>
+                                </div>
                             </ListGroup.Item>
                         ))}
                     </ListGroup>
