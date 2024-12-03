@@ -18,16 +18,17 @@ function AuthForm({ fields, buttons, onSubmit }) {
 
     return (
         <form
-            className="p-4 border rounded bg-primary text-white"
+            className="p-4 bg-light rounded p-4 shadow-sm"
             onSubmit={(e) => e.preventDefault()}
         >
+            <h1 className="text-center">Вход</h1>
             {fields.map((field) => (
                 <div className="mb-3" key={field.name}>
                     <label className="form-label">{field.label}</label>
                     <input
                         type={field.type === 'password' ? (passwordVisible ? 'text' : 'password') : field.type || 'text'}
                         name={field.name}
-                        className="form-control border-0"
+                        className="form-control border-primary"
                         placeholder={field.placeholder}
                         required={field.required}
                         onChange={(e) => handleChange(e, field.name)}
@@ -50,7 +51,7 @@ function AuthForm({ fields, buttons, onSubmit }) {
             ))}
             <div className="d-flex gap-2 justify-content-center">
                 {buttons.map((button, index) => (
-                    <Button key={index} {...button} className="btn btn-light text-primary">
+                    <Button key={index} {...button} className="btn btn-primary w-100">
                         {button.label}
                     </Button>
                 ))}

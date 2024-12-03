@@ -4,7 +4,7 @@ import { Container, Row, Col, Button, Card } from 'react-bootstrap';
 
 function HomePage() {
     return (
-        <div className="bg-light min-vh-100 d-flex align-items-center">
+        <div className="bg-light min-vh-100 d-flex mt-2">
             <Container className="text-center">
                 <h1 className="display-4 fw-bold mb-4 text-primary">Добро пожаловать в игру!</h1>
                 <p className="lead text-muted mb-5">

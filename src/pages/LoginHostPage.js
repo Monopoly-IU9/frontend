@@ -25,12 +25,12 @@ function LoginHostPage({ setIsHostAuthenticated }) {
     };
 
     const fields = [
-        { name: 'username', label: 'Username', placeholder: 'Enter username', required: true },
-        { name: 'password', label: 'Password', type: 'password', placeholder: 'Enter password', required: true }
+        { name: 'username', label: 'Логин', placeholder: 'Введите логин', required: true },
+        { name: 'password', label: 'Пароль', type: 'password', placeholder: 'Введите пароль', required: true }
     ];
 
     const buttons = [
-        { type: 'submit', label: 'Login', onClick: handleLogin },
+        { type: 'submit', label: 'Войти', onClick: handleLogin },
     ];
 
     return (
