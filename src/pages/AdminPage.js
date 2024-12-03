@@ -17,45 +17,26 @@ function AdminPage() {
                 </button>
             </div>
 
-            {/* Контент вкладок */}
-            <div className="tab-content" id="adminTabContent">
-                <div
-                    className="tab-pane fade"
-                    id="categories"
-                    role="tabpanel"
-                    aria-labelledby="categories-tab"
+            <div className="d-flex justify-content-between align-items-center mb-3 mt-3">
+                <h2>Игры</h2>
+                <button
+                    className="btn btn-outline-primary btn-sm"
+                    onClick={() => navigate('/admin/new-game')}
                 >
-                    <p>Контент для управления категориями.</p>
-                </div>
-                <div
-                    className="tab-pane fade show active"
-                    id="hosts"
-                    role="tabpanel"
-                    aria-labelledby="hosts-tab"
-                >
-
-                    <div className="d-flex justify-content-between align-items-center mb-3 mt-3">
-                        <h2>Игры</h2>
-                        <button
-                            className="btn btn-outline-primary btn-sm"
-                            onClick={() => navigate('/admin/new-game')}
-                        >
-                            +
-                        </button>
-                    </div>
-                    <ul className="list-group">
-                        {Array.from({length: 10}).map((_, index) => (
-                            <li
-                                key={index}
-                                className="list-group-item d-flex justify-content-between align-items-center"
-                                onClick={() => navigate('/admin/edit-game?id=1')}
-                            >
-                                Лукойл
-                            </li>
-                        ))}
-                    </ul>
-                </div>
+                    +
+                </button>
             </div>
+            <ul className="list-group">
+                {Array.from({length: 10}).map((_, index) => (
+                    <li
+                        key={index}
+                        className="list-group-item d-flex justify-content-between align-items-center"
+                        onClick={() => navigate('/admin/edit-game?id=1')}
+                    >
+                        Лукойл
+                    </li>
+                ))}
+            </ul>
         </div>
     );
 }
