@@ -27,7 +27,7 @@ function CustomNavbar({ isHostAuthenticated, setIsHostAuthenticated }) {
                 <Nav className="ms-auto">
                     {isHostAuthenticated && (
                         <Nav.Link onClick={handleLogout}>
-                            <FiLogOut size={20} color="white" /> {/* Иконка вместо текста */}
+                            <FiLogOut size={20} color="white" />
                         </Nav.Link>
                     )}
                 </Nav>
