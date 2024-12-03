@@ -7,7 +7,7 @@ function AdminPage() {
     const navigate = useNavigate();
 
     return (
-        <div className="container my-4 bg-light rounded p-4 shadow-sm">
+        <div className="container bg-light rounded p-4 shadow-sm">
             <div className="d-flex flex-column gap-3">
                 <button className="btn btn-outline-primary" onClick={() => navigate('/admin/categories')}>
                     Категории
