@@ -5,7 +5,7 @@ import {Button, ListGroup, Collapse} from 'react-bootstrap';
 import {Link, useNavigate, useSearchParams} from 'react-router-dom';
 import {getCategoryData, deleteCategory} from '../api/CategoriesAPI';
 import {addSet} from "../api/SetsAPI";
-import {addCard} from "../api/CardsAPI";
+import {addCard, deleteCard, editCard} from "../api/CardsAPI";
 
 function CategoryPage() {
     const [name, setName] = useState('');
@@ -77,25 +77,38 @@ function CategoryPage() {
     };
 
     // обработка изменения карточки
-    const handleEditCard = (updatedCard) => {
-        setCards(cards.map((card) => (card.id === updatedCard.id ? updatedCard : card)));
+    const handleEditCard = async (updatedCard) => {
+        console.log(updatedCard)
+        try {
+            // Отправка запроса на сервер
+            const response = await editCard(updatedCard.id, updatedCard.description, updatedCard.tags);
+
+            // Добавление карточки в локальное состояние
+            setCards(cards.map((card) => (card.id === updatedCard.id ? updatedCard : card)));
+        } catch (error) {
+            console.error('Ошибка при изменении карточки через API:', error);
+        }
+
     };
-    // обработка удаления категории
-    const handleDeleteCard = (id) => {
-        setCards(cards.filter((card) => card.id !== id));
+    // обработка удаления карточки
+    const handleDeleteCard = async (id) => {
+        console.log(id)
+        try {
+            const response = await deleteCard(id);
+            setCards(cards.filter((card) => card.id !== id));
+        } catch (error) {
+            console.error('Ошибка при удалении карточки:', error);
+        }
     };
     // обработка создания набора
     const handleAddSet = async (newSet) => {
         const cardIds = newSet.cards.map((card) => card.id);
         try {
             // Отправка нового набора на сервер
-            const addedSet = await addSet(categoryId, newSet.name, cardIds);
-            setSets([...sets, addedSet]);
+            const response = await addSet(newSet.name, categoryId, cardIds);
+            setSets([...sets, { ...newSet, id: response.set_id}]);
         } catch (error) {
             console.error('Ошибка при добавлении набора через API:', error);
-
-            // Если ошибка — добавляем локально
-            setSets([...sets, { ...newSet, id: Date.now() }]);
         }
     };
     // обработка изменения набора
@@ -207,7 +220,10 @@ function CategoryPage() {
                                         <Button
                                             variant="danger"
                                             size="sm"
-                                            onClick={() => handleDeleteCard(card.id)}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleDeleteCard(card.id)
+                                            }}
                                         >
                                             Удалить
                                         </Button>

@@ -13,8 +13,14 @@ export const addCard = async (category_id, description, hashtags) => {
     return response.data;
 };
 
+// Добавление карточки в категорию
+export const editCard = async (id, description, hashtags) => {
+    const response = await axios.post(`${BASE_URL}/admin/editCardByID`, { id, description, hashtags });
+    return response.data;
+};
+
 // Удаление карточки по ID
-export const deleteCard = async (cardId) => {
-    const response = await axios.post(`${BASE_URL}/deleteCard`, { cardId });
+export const deleteCard = async (card_id) => {
+    const response = await axios.post(`${BASE_URL}/admin/deleteCard?card_id=${ card_id }`);
     return response.data;
 };

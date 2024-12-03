@@ -8,14 +8,14 @@ export const getSetsByCategoryID = async (categoryId) => {
 };
 
 // Получение информации о наборе по ID
-export const getSetInfo = async (setId) => {
-    const response = await axios.post(`${BASE_URL}/getSetInfo`, { setId });
+export const getSetInfo = async (set_id) => {
+    const response = await axios.post(`${BASE_URL}/admin/getSetInfo?set_id=${set_id}`);
     return response.data;
 };
 
 // Добавление нового набора
-export const addSet = async (categoryId, name, cardIds) => {
-    const response = await axios.post(`${BASE_URL}/admin/addSetByCategoryID`, { categoryId, name, cardIds });
+export const addSet = async (name, category_id, cards) => {
+    const response = await axios.post(`${BASE_URL}/admin/addSetByCategoryID`, { name, category_id, cards });
     return response.data;
 };
 
