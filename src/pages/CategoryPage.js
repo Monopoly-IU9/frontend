@@ -4,6 +4,8 @@ import SetModal from '../components/SetModal';
 import {Button, ListGroup, Collapse} from 'react-bootstrap';
 import {Link, useNavigate, useSearchParams} from 'react-router-dom';
 import {getCategoryData, deleteCategory} from '../api/CategoriesAPI';
+import {addSet} from "../api/SetsAPI";
+import {addCard} from "../api/CardsAPI";
 
 function CategoryPage() {
     const [name, setName] = useState('');
@@ -58,9 +60,22 @@ function CategoryPage() {
         }
     };
     // обработка добавления новой карточки
-    const handleAddCard = (newCard) => {
-        setCards([...cards, {...newCard, id: Date.now()}]);
+    const handleAddCard = async (newCard) => {
+        console.log(newCard)
+        try {
+            // Отправка запроса на сервер
+            const response = await addCard(categoryId, newCard.description, newCard.tags);
+
+            // Добавление карточки в локальное состояние
+            setCards([...cards, { ...newCard, id: response.card_id }]);
+        } catch (error) {
+            console.error('Ошибка при добавлении карточки через API:', error);
+
+            // В случае ошибки можно добавить локально (опционально)
+            setCards([...cards, { ...newCard, id: Date.now() }]);
+        }
     };
+
     // обработка изменения карточки
     const handleEditCard = (updatedCard) => {
         setCards(cards.map((card) => (card.id === updatedCard.id ? updatedCard : card)));
@@ -70,8 +85,18 @@ function CategoryPage() {
         setCards(cards.filter((card) => card.id !== id));
     };
     // обработка создания набора
-    const handleAddSet = (newSet) => {
-        setSets([...sets, {...newSet, id: Date.now()}]);
+    const handleAddSet = async (newSet) => {
+        const cardIds = newSet.cards.map((card) => card.id);
+        try {
+            // Отправка нового набора на сервер
+            const addedSet = await addSet(categoryId, newSet.name, cardIds);
+            setSets([...sets, addedSet]);
+        } catch (error) {
+            console.error('Ошибка при добавлении набора через API:', error);
+
+            // Если ошибка — добавляем локально
+            setSets([...sets, { ...newSet, id: Date.now() }]);
+        }
     };
     // обработка изменения набора
     const handleEditSet = (updatedSet) => {
@@ -159,15 +184,15 @@ function CategoryPage() {
                     <ListGroup className="mb-4">
                         {cards.map((card) => (
                             <ListGroup.Item key={card.id} className="p-0 border-0">
-                                <div className="card">
+                                <div className="card"
+                                     onClick={() => {
+                                         setSelectedCard(card);
+                                         setShowModal(true);
+                                     }}>
                                     <div className="card-body">
                                         <h5 className="card-title">{categoryId + "." + card.id}</h5>
                                         <p
                                             className="card-text"
-                                            onClick={() => {
-                                                setSelectedCard(card);
-                                                setShowModal(true);
-                                            }}
                                             style={{
                                                 display: '-webkit-box',
                                                 WebkitLineClamp: 3,

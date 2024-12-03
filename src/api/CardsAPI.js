@@ -8,8 +8,8 @@ export const getCardsByCategoryID = async (categoryId) => {
 };
 
 // Добавление карточки в категорию
-export const addCardToCategoryID = async (categoryId, description, tags) => {
-    const response = await axios.post(`${BASE_URL}/addCardToCategoryID`, { categoryId, description, tags });
+export const addCard = async (category_id, description, hashtags) => {
+    const response = await axios.post(`${BASE_URL}/admin/addCardByCategoryID`, { category_id, description, hashtags });
     return response.data;
 };
 

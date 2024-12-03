@@ -15,7 +15,7 @@ export const getSetInfo = async (setId) => {
 
 // Добавление нового набора
 export const addSet = async (categoryId, name, cardIds) => {
-    const response = await axios.post(`${BASE_URL}/addSet`, { categoryId, name, cardIds });
+    const response = await axios.post(`${BASE_URL}/admin/addSetByCategoryID`, { categoryId, name, cardIds });
     return response.data;
 };
 
