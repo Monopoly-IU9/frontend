@@ -13,19 +13,12 @@ function CardModal({ show, onClose, card }) {
     return (
         <Modal show={show} onHide={onClose} centered>
             <Modal.Header closeButton style={headerStyle}>
-                <Modal.Title>
-                    Карточка {card.categoryId}.{card.id}
-                </Modal.Title>
+                <Modal.Title>{`Категория ${card.categoryId}`}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <p>{card.description}</p>
-                <div>
-                    {card.tags.map((tag, index) => (
-                        <Badge key={index} className="me-1" bg={card.color}>
-                            {tag}
-                        </Badge>
-                    ))}
-                </div>
+                <p>
+                    <strong>{`${card.categoryId}.${card.id}`}</strong>: {card.description}
+                </p>
             </Modal.Body>
         </Modal>
     );
