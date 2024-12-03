@@ -36,8 +36,10 @@ function LoginHostPage({ setIsHostAuthenticated }) {
     return (
         <div>
             <div className="d-flex justify-content-center align-items-center vh-100">
-                <AuthForm fields={fields} buttons={buttons} onSubmit={handleInputChange} />
-                {error && <p className="text-danger">{error}</p>}
+                <div>
+                    <AuthForm fields={fields} buttons={buttons} onSubmit={handleInputChange} />
+                    {error && <p className="text-danger text-center mt-2">{error}</p>}
+                </div>
             </div>
         </div>
     );
