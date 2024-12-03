@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import CategoryModal from '../components/CategoryModal';
 import SetModal from '../components/SetModal';
-import { Button, ListGroup } from 'react-bootstrap';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { getCategoryData, deleteCategory } from '../api/CategoriesAPI';
+import {Button, ListGroup, Collapse} from 'react-bootstrap';
+import {Link, useNavigate, useSearchParams} from 'react-router-dom';
+import {getCategoryData, deleteCategory} from '../api/CategoriesAPI';
 
 function CategoryPage() {
     const [name, setName] = useState('');
@@ -16,7 +16,8 @@ function CategoryPage() {
     // храним выбранные карточки
     const [selectedCard, setSelectedCard] = useState(null);
     const [selectedSet, setSelectedSet] = useState(null);
-    // навигация по страницам
+    const [openCards, setOpenCards] = useState(false);
+    const [openSets, setOpenSets] = useState(false);
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const categoryId = searchParams.get('id');
@@ -58,7 +59,7 @@ function CategoryPage() {
     };
     // обработка добавления новой карточки
     const handleAddCard = (newCard) => {
-        setCards([...cards, { ...newCard, id: Date.now() }]);
+        setCards([...cards, {...newCard, id: Date.now()}]);
     };
     // обработка изменения карточки
     const handleEditCard = (updatedCard) => {
@@ -70,7 +71,7 @@ function CategoryPage() {
     };
     // обработка создания набора
     const handleAddSet = (newSet) => {
-        setSets([...sets, { ...newSet, id: Date.now() }]);
+        setSets([...sets, {...newSet, id: Date.now()}]);
     };
     // обработка изменения набора
     const handleEditSet = (updatedSet) => {
@@ -87,7 +88,7 @@ function CategoryPage() {
             <Link
                 to="/admin/categories"
                 className="text-decoration-none d-flex align-items-center mb-3"
-                style={{ color: '#0d6efd' }}
+                style={{color: '#0d6efd'}}
             >
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -125,14 +126,61 @@ function CategoryPage() {
                 />
             </div>
 
-            {/* Список карточек */}
-            <h4>Карточки</h4>
+            {/* Визуализация категории */}
+            <div
+                className="mb-4 d-flex justify-content-center align-items-center"
+                style={{
+                    backgroundColor: color,
+                    borderRadius: '8px',
+                    padding: '10px',
+                    color: '#ffffff',
+                    textAlign: 'center',
+                    fontWeight: 'bold',
+                    fontSize: '1.2rem',
+                }}
+            >
+                {name || 'Пример'}
+            </div>
+
+            <h4
+                onClick={() => setOpenCards(!openCards)}
+                aria-controls="cards-collapse"
+                aria-expanded={openCards}
+                className="d-flex justify-content-between align-items-center cursor-pointer"
+            >
+                Карточки
+                <Button variant="link" className="text-decoration-none">
+                    {openCards ? '▲' : '▼'}
+                </Button>
+            </h4>
+
+            <Collapse in={openCards}>
+                <div id="cards-collapse">
+                    <ListGroup className="mb-4">
+                        {cards.map((card) => (
+                            <ListGroup.Item key={card.id} className="d-flex justify-content-between align-items-center">
+                                <span onClick={() => {
+                                    setSelectedCard(card);
+                                    setShowModal(true);
+                                }}>{card.description}</span>
+                                <Button
+                                    variant="danger"
+                                    size="sm"
+                                    onClick={() => handleDeleteCard(card.id)}
+                                >
+                                    Удалить
+                                </Button>
+                            </ListGroup.Item>
+                        ))}
+                    </ListGroup>
+                </div>
+            </Collapse>
             <Button
                 onClick={() => {
                     setShowModal(true);
                     setSelectedCard(null);
                 }}
-                className="btn btn-primary mb-2"
+                className="btn btn-primary mb-2 w-100"
             >
                 Добавить карточку
             </Button>
@@ -143,33 +191,55 @@ function CategoryPage() {
                 onSave={(card) => selectedCard ? handleEditCard(card) : handleAddCard(card)}
                 card={selectedCard}
             />
+            <h4
+                onClick={() => setOpenSets(!openSets)}
+                aria-controls="sets-collapse"
+                aria-expanded={openSets}
+                className="d-flex justify-content-between align-items-center cursor-pointer"
+            >
+                Наборы
+                <Button variant="link" className="text-decoration-none">
+                    {openSets ? '▲' : '▼'}
+                </Button>
+            </h4>
 
-            <ListGroup className="mb-4">
-                {cards.map((card) => (
-                    <ListGroup.Item key={card.id} className="d-flex justify-content-between align-items-center">
-                        <span onClick={() => {
-                            setSelectedCard(card);
-                            setShowModal(true);
-                        }}>{card.description}</span>
-                        <Button
-                            variant="danger"
-                            size="sm"
-                            onClick={() => handleDeleteCard(card.id)}
-                        >
-                            Удалить
-                        </Button>
-                    </ListGroup.Item>
-                ))}
-            </ListGroup>
 
-            {/* Список наборов */}
-            <h4>Наборы</h4>
+
+            <Collapse in={openSets}>
+                <div id="sets-collapse">
+                    <ListGroup className="mb-4">
+                        {sets.map((set) => (
+                            <ListGroup.Item
+                                key={set.id}
+                                className="d-flex justify-content-between align-items-center"
+                                action
+                                onClick={() => {
+                                    setSelectedSet(set);
+                                    setShowSetModal(true);
+                                }}
+                            >
+                                {set.name}
+                                    <Button
+                                        variant="danger"
+                                        size="sm"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleDeleteSet(set.id);
+                                        }}
+                                    >
+                                        Удалить
+                                    </Button>
+                            </ListGroup.Item>
+                        ))}
+                    </ListGroup>
+                </div>
+            </Collapse>
             <Button
                 onClick={() => {
                     setShowSetModal(true);
                     setSelectedSet(null);
                 }}
-                className="btn btn-primary mb-2"
+                className="btn btn-primary mb-2 w-100"
             >
                 Добавить набор
             </Button>
@@ -181,40 +251,13 @@ function CategoryPage() {
                 set={selectedSet}
                 cards={cards}
             />
-
-            <ListGroup className="mb-4">
-                {sets.map((set) => (
-                    <ListGroup.Item
-                        key={set.id}
-                        className="d-flex justify-content-between align-items-center"
-                        action
-                        onClick={() => {
-                            setSelectedSet(set);
-                            setShowSetModal(true);
-                        }}
-                    >
-                        {set.name}
-                        <Button
-                            variant="danger"
-                            size="sm"
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                handleDeleteSet(set.id);
-                            }}
-                        >
-                            Удалить
-                        </Button>
-                    </ListGroup.Item>
-                ))}
-            </ListGroup>
-
             {/* Кнопка сохранения изменений */}
-            <Button onClick={handleUpdateCategory} className="btn btn-success mt-3">
+            <button onClick={handleUpdateCategory} className="btn btn-primary mt-3 w-100">
                 Сохранить изменения
-            </Button>
-            <Button onClick={handleDeleteCategory} className="btn btn-danger mt-3 ms-2">
+            </button>
+            <button onClick={handleDeleteCategory} className="btn btn-outline-primary mt-3 w-100">
                 Удалить
-            </Button>
+            </button>
 
         </div>
     );
