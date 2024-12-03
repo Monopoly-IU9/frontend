@@ -4,7 +4,7 @@ import SetModal from '../components/SetModal';
 import {Button, ListGroup, Collapse} from 'react-bootstrap';
 import {Link, useNavigate, useSearchParams} from 'react-router-dom';
 import {getCategoryData, deleteCategory} from '../api/CategoriesAPI';
-import {addSet} from "../api/SetsAPI";
+import {addSet, deleteSet, getSetInfo} from "../api/SetsAPI";
 import {addCard, deleteCard, editCard} from "../api/CardsAPI";
 
 function CategoryPage() {
@@ -111,13 +111,52 @@ function CategoryPage() {
             console.error('Ошибка при добавлении набора через API:', error);
         }
     };
+
+    const handleSetClick = async (setId) => {
+        try {
+            // Проверяем, есть ли набор в `sets` и содержит ли он карточки
+            const existingSet = sets.find((set) => set.id === setId);
+
+            if (existingSet && existingSet.cards && existingSet.cards.length > 0) {
+                // Если информация о карточках уже есть, используем её
+                setSelectedSet(existingSet);
+            } else {
+                // Если информации нет, отправляем запрос к серверу
+                const setInfo = await getSetInfo(setId);
+
+                const updatedSet = {
+                    id: setId,
+                    name: setInfo.name,
+                    cards: setInfo.cards,
+                };
+
+                // Обновляем `sets` с новой информацией
+                setSets((prevSets) =>
+                    prevSets.map((set) => (set.id === setId ? updatedSet : set))
+                );
+
+                setSelectedSet(updatedSet); // Обновляем выбранный набор
+            }
+
+            setShowSetModal(true); // Показываем модальное окно
+        } catch (error) {
+            console.error('Ошибка при получении информации о наборе:', error);
+        }
+    };
+
+
     // обработка изменения набора
     const handleEditSet = (updatedSet) => {
         setSets(sets.map((set) => (set.id === updatedSet.id ? updatedSet : set)));
     };
     // обработка удаления набора
-    const handleDeleteSet = (id) => {
-        setSets(sets.filter((set) => set.id !== id));
+    const handleDeleteSet = async (id) => {
+        try {
+            const response = await deleteSet(id);
+            setSets(sets.filter((set) => set.id !== id));
+        } catch (error) {
+            console.error('Ошибка при удалении набора:', error);
+        }
     };
 
     return (
@@ -271,10 +310,7 @@ function CategoryPage() {
                                 key={set.id}
                                 className="d-flex justify-content-between align-items-center"
                                 action
-                                onClick={() => {
-                                    setSelectedSet(set);
-                                    setShowSetModal(true);
-                                }}
+                                onClick={() => handleSetClick(set.id)}
                             >
                                 {set.name}
                                 <Button

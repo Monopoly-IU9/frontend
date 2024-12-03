@@ -26,7 +26,7 @@ export const editSet = async (setId, name, cardIds) => {
 };
 
 // Удаление набора по ID
-export const deleteSet = async (setId) => {
-    const response = await axios.post(`${BASE_URL}/deleteSet`, { setId });
+export const deleteSet = async (set_id) => {
+    const response = await axios.post(`${BASE_URL}/admin/deleteSetByID?set_id=${set_id}`);
     return response.data;
 };
