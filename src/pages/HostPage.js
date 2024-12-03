@@ -24,10 +24,8 @@ function HostPage() {
     }, []);
 
     return (
-        <Container className="my-5">
-            <h2 className="text-primary mb-4">Ваши Игры</h2>
-
-            <h3 className="text-success">Активные Игры</h3>
+        <div className="container bg-light rounded p-4 shadow-sm">
+            <h2 className="text-success">Активные Игры</h2>
             <Row className="mb-4">
                 {activeGames.length > 0 ? activeGames.map(game => (
                     <Col md={6} lg={4} key={game.id}>
@@ -47,7 +45,7 @@ function HostPage() {
                 )) : <p className="text-muted">Нет активных игр</p>}
             </Row>
 
-            <h3 className="text-secondary">Неактивные Игры</h3>
+            <h2 className="text-secondary">Неактивные Игры</h2>
             <Row>
                 {inactiveGames.length > 0 ? inactiveGames.map(game => (
                     <Col md={6} lg={4} key={game.id}>
@@ -66,7 +64,7 @@ function HostPage() {
                     </Col>
                 )) : <p className="text-muted">Нет неактивных игр</p>}
             </Row>
-        </Container>
+        </div>
     );
 }
 

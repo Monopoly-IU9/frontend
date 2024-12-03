@@ -1,6 +1,7 @@
 import React from 'react';
-import { Navbar, Nav, Container, Button } from 'react-bootstrap';
-import {Link, useNavigate} from 'react-router-dom';
+import { Navbar, Nav, Container } from 'react-bootstrap';
+import { Link, useNavigate } from 'react-router-dom';
+import { FiLogOut } from 'react-icons/fi';
 import { hostLogout } from '../api/AuthAPI';
 
 function CustomNavbar({ isHostAuthenticated, setIsHostAuthenticated }) {
@@ -26,7 +27,7 @@ function CustomNavbar({ isHostAuthenticated, setIsHostAuthenticated }) {
                 <Nav className="ms-auto">
                     {isHostAuthenticated && (
                         <Nav.Link onClick={handleLogout}>
-                            Выйти
+                            <FiLogOut size={20} color="white" /> {/* Иконка вместо текста */}
                         </Nav.Link>
                     )}
                 </Nav>
