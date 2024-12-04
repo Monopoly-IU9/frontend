@@ -28,18 +28,36 @@ function App() {
             const adminToken = localStorage.getItem('adminToken');
             const hostToken = localStorage.getItem('hostToken');
 
+            // Проверка авторизации администратора
             const adminPromise = adminToken
-                ? checkAdminAuth().then(() => setIsAdminAuthenticated(true)).catch(() => {
-                    localStorage.removeItem('adminToken');
-                    setIsAdminAuthenticated(false);
-                })
+                ? checkAdminAuth()
+                    .then(() => {
+                        setIsAdminAuthenticated(true);
+                    })
+                    .catch((error) => {
+                        console.error("Ошибка авторизации администратора:", error);
+                        if (error.response?.status === 401) {
+                            // Удаляем токен только при ошибке 401 (не авторизован)
+                            localStorage.removeItem('adminToken');
+                            setIsAdminAuthenticated(false);
+                        }
+                    })
                 : Promise.resolve();
 
+            // Проверка авторизации ведущего
             const hostPromise = hostToken
-                ? checkHostAuth().then(() => setIsHostAuthenticated(true)).catch(() => {
-                    localStorage.removeItem('hostToken');
-                    setIsHostAuthenticated(false);
-                })
+                ? checkHostAuth()
+                    .then(() => {
+                        setIsHostAuthenticated(true);
+                    })
+                    .catch((error) => {
+                        console.error("Ошибка авторизации ведущего:", error);
+                        if (error.response?.status === 401) {
+                            // Удаляем токен только при ошибке 401 (не авторизован)
+                            localStorage.removeItem('hostToken');
+                            setIsHostAuthenticated(false);
+                        }
+                    })
                 : Promise.resolve();
 
             await Promise.all([adminPromise, hostPromise]);

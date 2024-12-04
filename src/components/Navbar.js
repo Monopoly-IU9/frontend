@@ -15,6 +15,9 @@ function CustomNavbar({ isHostAuthenticated, setIsHostAuthenticated }) {
             navigate('/home');
         } catch (error) {
             console.error('Ошибка при выходе:', error);
+            localStorage.removeItem('hostToken'); // Удаляем токен из локального хранилища
+            setIsHostAuthenticated(false); // Обновляем состояние
+            navigate('/home');
         }
     };
 
