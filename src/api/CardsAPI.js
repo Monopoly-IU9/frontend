@@ -15,7 +15,7 @@ export const addCard = async (category_id, description, hashtags) => {
 
 // Добавление карточки в категорию
 export const editCard = async (id, description, hashtags) => {
-    const response = await axios.post(`${BASE_URL}/admin/editCardByID`, { id, description, hashtags });
+    const response = await axios.post(`${BASE_URL}/admin/editCardByID?card_id=${ id }`, { description, hashtags });
     return response.data;
 };
 
