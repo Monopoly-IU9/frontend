@@ -4,7 +4,7 @@ import SetModal from '../components/SetModal';
 import {Button, ListGroup, Collapse} from 'react-bootstrap';
 import {Link, useNavigate, useSearchParams} from 'react-router-dom';
 import {getCategoryData, deleteCategory, createCategory, editCategory} from '../api/CategoriesAPI';
-import {addSet, deleteSet, getSetInfo} from "../api/SetsAPI";
+import {addSet, deleteSet, editSet, getSetInfo} from "../api/SetsAPI";
 import {addCard, deleteCard, editCard} from "../api/CardsAPI";
 
 function CategoryPage() {
@@ -155,10 +155,16 @@ function CategoryPage() {
         }
     };
 
-
     // обработка изменения набора
-    const handleEditSet = (updatedSet) => {
-        setSets(sets.map((set) => (set.id === updatedSet.id ? updatedSet : set)));
+    const handleEditSet = async (updatedSet) => {
+        const cardIds = updatedSet.cards.map((card) => card.id);
+        try {
+            // Отправка нового набора на сервер
+            const response = await editSet(updatedSet.id, updatedSet.name, cardIds);
+            setSets(sets.map((set) => (set.id === updatedSet.id ? updatedSet : set)));
+        } catch (error) {
+            console.error('Ошибка при добавлении набора через API:', error);
+        }
     };
     // обработка удаления набора
     const handleDeleteSet = async (id) => {

@@ -20,8 +20,8 @@ export const addSet = async (name, category_id, cards) => {
 };
 
 // Редактирование набора
-export const editSet = async (setId, name, cardIds) => {
-    const response = await axios.post(`${BASE_URL}/editSet`, { setId, name, cardIds });
+export const editSet = async (set_id, name, cards) => {
+    const response = await axios.post(`${BASE_URL}/admin/editSetByID?set_id=${set_id}`, { name, cards });
     return response.data;
 };
 
