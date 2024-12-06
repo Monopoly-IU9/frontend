@@ -3,11 +3,12 @@ import CategoryModal from '../components/CategoryModal';
 import SetModal from '../components/SetModal';
 import {Button, ListGroup, Collapse} from 'react-bootstrap';
 import {Link, useNavigate, useSearchParams} from 'react-router-dom';
-import {getCategoryData, deleteCategory} from '../api/CategoriesAPI';
+import {getCategoryData, deleteCategory, createCategory, editCategory} from '../api/CategoriesAPI';
 import {addSet, deleteSet, getSetInfo} from "../api/SetsAPI";
 import {addCard, deleteCard, editCard} from "../api/CardsAPI";
 
 function CategoryPage() {
+    const [error, setError] = useState('');
     const [name, setName] = useState('');
     const [color, setColor] = useState('#FFFFFF');
     const [cards, setCards] = useState([]);
@@ -26,7 +27,7 @@ function CategoryPage() {
 
     useEffect(() => {
         if (categoryId) {
-            fetchCategoryData();
+            fetchCategoryData().then();
         }
     }, [categoryId]);
 
@@ -43,8 +44,18 @@ function CategoryPage() {
     };
 
     // обработка изменения категории
-    const handleUpdateCategory = () => {
-        navigate(`/admin/categories`);
+    const handleUpdateCategory = async () => {
+        if (!name.trim()) {
+            setError('Имя категории не может быть пустым.');
+            return;
+        }
+        try {
+            await editCategory(categoryId, name, color.replace('#', '')); // Удаляем символ "#" из цвета перед отправкой
+            navigate('/admin/categories'); // Переход обратно к списку категорий после успешного редактирвания
+        } catch (err) {
+            console.error('Ошибка при редактировании категории:', err);
+            setError('Не удалось изменить категорию. Попробуйте позже.');
+        }
     }
 
     const handleDeleteCategory = async () => {

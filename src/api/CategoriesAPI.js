@@ -26,8 +26,8 @@ export const getCategoryData = async (categoryId) => {
 };
 
 // Редактирование категории по ID
-export const editCategory = async (categoryId) => {
-    const response = await axios.post(`${BASE_URL}/admin/editCategory?category_id=${categoryId}`);
+export const editCategory = async (categoryId, name, color) => {
+    const response = await axios.post(`${BASE_URL}/admin/editCategory?category_id=${categoryId}`, { name, color });
     return response.data;
 };
 
