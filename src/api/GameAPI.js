@@ -7,8 +7,14 @@ export const adminGetGames = async () => {
     return response.data;
 };
 
-// Получение информации ол игре для админа
+// Получение информации об игре для админа
 export const getGameInfo = async (id) => {
     const response = await axios.get(`${BASE_URL}/admin/getgameInfo/${id}`);
+    return response.data;
+};
+
+// Изменение игры админом
+export const editGame = async (id, name, sets, categories) => {
+    const response = await axios.post(`${BASE_URL}/admin/editGame/${id}`, {name, sets, categories});
     return response.data;
 };

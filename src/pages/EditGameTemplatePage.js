@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { getGameInfo } from '../api/GameAPI'; // Импорт ручки получения данных
+import { getGameInfo, editGame } from '../api/GameAPI';
 
 function EditGameTemplate() {
     const [searchParams] = useSearchParams();
@@ -64,16 +64,20 @@ function EditGameTemplate() {
         );
     };
 
-    const handleUpdateGame = (e) => {
+    const handleUpdateGame = async (e) => {
         e.preventDefault();
-        // Логика обновления игры (отправка изменений на сервер)
-        alert('Изменения сохранены');
-        navigate('/admin');
+        try {
+            await editGame(gameId, gameName, selectedSets, selectedCategories);
+            navigate('/admin');
+        } catch (error) {
+            console.error('Ошибка сохранения игры:', error);
+            alert('Не удалось сохранить изменения');
+        }
     };
 
     const handleDeleteGame = (e) => {
         e.preventDefault();
-        // Логика удаления игры
+        // Логика удаления игры (при необходимости можно добавить API-ручку)
         alert('Игра удалена');
         navigate('/admin');
     };
