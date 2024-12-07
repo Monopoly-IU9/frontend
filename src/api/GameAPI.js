@@ -19,7 +19,8 @@ export const getGameInfo = async (id) => {
 };
 
 // Изменение игры админом
-export const editGame = async (id, name, sets, categories) => {
-    const response = await axios.post(`${BASE_URL}/admin/editGame/${id}`, {name, sets, categories});
+export const editGame = async (id, name, sets, categories, hashtags) => {
+    const response = await axios.post(`${BASE_URL}/admin/editGame/${id}`, {name, sets, categories, hashtags});
     return response.data;
 };
+

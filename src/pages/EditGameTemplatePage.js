@@ -80,7 +80,7 @@ function EditGameTemplate() {
     const handleUpdateGame = async (e) => {
         e.preventDefault();
         try {
-            await editGame(gameId, gameName, selectedSets, selectedCategories);
+            await editGame(gameId, gameName, selectedSets, selectedCategories, selectedTags);
             navigate('/admin');
         } catch (error) {
             console.error('Ошибка сохранения игры:', error);
