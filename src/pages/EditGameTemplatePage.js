@@ -42,17 +42,30 @@ function EditGameTemplate() {
 
     // Обновление выбора категории
     const toggleCategory = (categoryId) => {
-        setSelectedCategories((prev) =>
-            prev.includes(categoryId)
-                ? prev.filter((id) => id !== categoryId)
-                : [...prev, categoryId]
-        );
+        setSelectedCategories((prevCategories) => {
+            if (prevCategories.includes(categoryId)) {
+                // Убираем категорию и её наборы
+                const updatedCategories = prevCategories.filter((id) => id !== categoryId);
+                const updatedSets = selectedSets.filter(
+                    (setId) =>
+                        !categories
+                            .find((category) => category.id === categoryId)
+                            .sets.map((set) => set.id)
+                            .includes(setId)
+                );
+                setSelectedSets(updatedSets);
+                return updatedCategories;
+            } else {
+                // Добавляем категорию
+                return [...prevCategories, categoryId];
+            }
+        });
     };
 
     // Обновление выбора набора
     const toggleSet = (setId) => {
-        setSelectedSets((prev) =>
-            prev.includes(setId) ? prev.filter((id) => id !== setId) : [...prev, setId]
+        setSelectedSets((prevSets) =>
+            prevSets.includes(setId) ? prevSets.filter((id) => id !== setId) : [...prevSets, setId]
         );
     };
 
