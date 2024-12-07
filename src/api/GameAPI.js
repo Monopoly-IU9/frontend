@@ -1,6 +1,12 @@
 import axios from 'axios';
 import {BASE_URL} from "./config";
 
+// Получение списка игры для админа
+export const adminGetGames = async () => {
+    const response = await axios.get(`${BASE_URL}/admin/getGames`);
+    return response.data;
+};
+
 // Получение списка игр для ведущего
 export const fetchGamesForHost = async (hostId) => {
     const response = await axios.get(`${BASE_URL}/games/host/${hostId}`);

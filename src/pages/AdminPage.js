@@ -1,10 +1,31 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { adminGetGames } from "../api/GameAPI";
 
 function AdminPage() {
+    // Состояние для хранения игр
+    const [games, setGames] = useState([]);
+    const [loading, setLoading] = useState(true);
+
     // Навигатор для перехода по страницам
     const navigate = useNavigate();
+
+    // Загрузка категорий при монтировании компонента
+    useEffect(() => {
+        const fetchGames = async () => {
+            try {
+                const data = await adminGetGames();
+                setGames(data);
+            } catch (error) {
+                console.error('Ошибка при загрузке категорий:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchGames();
+    }, []);
+
 
     return (
         <div className="container bg-light rounded p-4 shadow-sm">
@@ -26,17 +47,21 @@ function AdminPage() {
                     +
                 </button>
             </div>
-            <ul className="list-group">
-                {Array.from({length: 10}).map((_, index) => (
-                    <li
-                        key={index}
-                        className="list-group-item d-flex justify-content-between align-items-center"
-                        onClick={() => navigate('/admin/edit-game?id=1')}
-                    >
-                        Лукойл
-                    </li>
-                ))}
-            </ul>
+            {loading ? (
+                <p>Загрузка игр...</p>
+            ) : (
+                <ul className="list-group">
+                    {games.map((category) => (
+                        <li
+                            key={category.id}
+                            className="list-group-item d-flex justify-content-between align-items-center"
+                            onClick={() => navigate(`/admin/edit-game?id=${category.id}`)}
+                        >
+                            {category.name}
+                        </li>
+                    ))}
+                </ul>
+            )}
         </div>
     );
 }
