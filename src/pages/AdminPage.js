@@ -51,13 +51,13 @@ function AdminPage() {
                 <p>Загрузка игр...</p>
             ) : (
                 <ul className="list-group">
-                    {games.map((category) => (
+                    {games.map((game) => (
                         <li
-                            key={category.id}
+                            key={game.id}
                             className="list-group-item d-flex justify-content-between align-items-center"
-                            onClick={() => navigate(`/admin/edit-game?id=${category.id}`)}
+                            onClick={() => navigate(`/admin/edit-game?id=${game.id}`)}
                         >
-                            {category.name}
+                            {game.name}
                         </li>
                     ))}
                 </ul>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { getGameInfo } from '../api/GameAPI'; // Импорт ручки получения данных
 
 function EditGameTemplate() {
     const [searchParams] = useSearchParams();
@@ -8,65 +9,72 @@ function EditGameTemplate() {
 
     const [gameName, setGameName] = useState('');
     const [categories, setCategories] = useState([]);
-    const [sets, setSets] = useState([]);
+    const [selectedCategories, setSelectedCategories] = useState([]);
+    const [selectedSets, setSelectedSets] = useState([]);
     const [tags, setTags] = useState([]);
+    const [selectedTags, setSelectedTags] = useState([]);
 
-    // Захардкоженные данные для симуляции
-    const allCategories = [
-        { id: 1, name: 'Category 1', color: 'blue' },
-        { id: 2, name: 'Category 2', color: 'green' }
-    ];
-    const allSets = [
-        { id: 1, name: 'Все карточки', categoryId: 1 },
-        { id: 2, name: 'Набор 1', categoryId: 1 },
-        { id: 3, name: 'Все карточки', categoryId: 2 },
-        { id: 4, name: 'Набор 2', categoryId: 2 }
-    ];
-    const allTags = ['Хэштег 1', 'Хэштег 2'];
-
-    // Инициализация данных
     useEffect(() => {
-        setGameName('Sample Game');
-        setCategories([]); // Изначально категории пусты
-        setSets([]); // Изначально наборы пусты
-        setTags(allTags); // Изначально выбираем все теги
+        if (gameId) {
+            // Получение данных о шаблоне игры
+            getGameInfo(gameId)
+                .then((data) => {
+                    setGameName(data.name);
+                    setCategories(data.categories);
+                    setTags(data.hashtags);
+                    setSelectedCategories(
+                        data.categories.filter((cat) => cat.in_game).map((cat) => cat.id)
+                    );
+                    setSelectedSets(
+                        data.categories
+                            .flatMap((cat) =>
+                                cat.sets.filter((set) => set.in_category).map((set) => set.id)
+                            )
+                    );
+                    setSelectedTags(data.hashtags.filter((tag) => tag.in_game).map((tag) => tag.name));
+                })
+                .catch((error) => {
+                    console.error('Ошибка загрузки данных:', error);
+                    alert('Не удалось загрузить данные игры');
+                });
+        }
     }, [gameId]);
 
     // Обновление выбора категории
     const toggleCategory = (categoryId) => {
-        setCategories((prevCategories) =>
-            prevCategories.includes(categoryId)
-                ? prevCategories.filter((id) => id !== categoryId)
-                : [...prevCategories, categoryId]
+        setSelectedCategories((prev) =>
+            prev.includes(categoryId)
+                ? prev.filter((id) => id !== categoryId)
+                : [...prev, categoryId]
         );
     };
 
     // Обновление выбора набора
     const toggleSet = (setId) => {
-        setSets((prevSets) =>
-            prevSets.includes(setId)
-                ? prevSets.filter((id) => id !== setId)
-                : [...prevSets, setId]
+        setSelectedSets((prev) =>
+            prev.includes(setId) ? prev.filter((id) => id !== setId) : [...prev, setId]
         );
     };
 
-    // Обновление выбора тегов
-    const toggleTag = (tag) => {
-        setTags((prevTags) =>
-            prevTags.includes(tag) ? prevTags.filter((t) => t !== tag) : [...prevTags, tag]
+    const toggleTag = (tagName) => {
+        setSelectedTags((prev) =>
+            prev.includes(tagName)
+                ? prev.filter((tag) => tag !== tagName)
+                : [...prev, tagName]
         );
     };
-
-    // Фильтрация наборов на основе выбранных категорий
-    const filteredSets = allSets.filter((set) => categories.includes(set.categoryId));
 
     const handleUpdateGame = (e) => {
         e.preventDefault();
+        // Логика обновления игры (отправка изменений на сервер)
+        alert('Изменения сохранены');
         navigate('/admin');
     };
 
     const handleDeleteGame = (e) => {
         e.preventDefault();
+        // Логика удаления игры
+        alert('Игра удалена');
         navigate('/admin');
     };
 
@@ -107,41 +115,39 @@ function EditGameTemplate() {
             <div className="mb-3">
                 <label className="form-label">Категории</label>
                 <div>
-                    {allCategories.map((category) => (
+                    {categories.map((category) => (
                         <div key={category.id}>
                             <div className="form-check">
                                 <input
                                     type="checkbox"
                                     className="form-check-input"
                                     id={`category-${category.id}`}
-                                    checked={categories.includes(category.id)}
+                                    checked={selectedCategories.includes(category.id)}
                                     onChange={() => toggleCategory(category.id)}
                                 />
                                 <label className="form-check-label" htmlFor={`category-${category.id}`}>
                                     {category.name}
                                 </label>
                             </div>
-                            {categories.includes(category.id) && (
+                            {selectedCategories.includes(category.id) && (
                                 <div className="ms-4">
-                                    {allSets
-                                        .filter((set) => set.categoryId === category.id)
-                                        .map((set) => (
-                                            <div className="form-check" key={set.id}>
-                                                <input
-                                                    type="checkbox"
-                                                    className="form-check-input"
-                                                    id={`set-${set.id}`}
-                                                    checked={sets.includes(set.id)}
-                                                    onChange={() => toggleSet(set.id)}
-                                                />
-                                                <label
-                                                    className="form-check-label"
-                                                    htmlFor={`set-${set.id}`}
-                                                >
-                                                    {set.name}
-                                                </label>
-                                            </div>
-                                        ))}
+                                    {category.sets.map((set) => (
+                                        <div className="form-check" key={set.id}>
+                                            <input
+                                                type="checkbox"
+                                                className="form-check-input"
+                                                id={`set-${set.id}`}
+                                                checked={selectedSets.includes(set.id)}
+                                                onChange={() => toggleSet(set.id)}
+                                            />
+                                            <label
+                                                className="form-check-label"
+                                                htmlFor={`set-${set.id}`}
+                                            >
+                                                {set.name}
+                                            </label>
+                                        </div>
+                                    ))}
                                 </div>
                             )}
                         </div>
@@ -152,17 +158,17 @@ function EditGameTemplate() {
             <div className="mb-3">
                 <label className="form-label">Теги</label>
                 <div>
-                    {allTags.map((tag, index) => (
+                    {tags.map((tag, index) => (
                         <div className="form-check" key={index}>
                             <input
                                 type="checkbox"
                                 className="form-check-input"
                                 id={`tag-${index}`}
-                                checked={tags.includes(tag)}
-                                onChange={() => toggleTag(tag)}
+                                checked={selectedTags.includes(tag.name)}
+                                onChange={() => toggleTag(tag.name)}
                             />
                             <label className="form-check-label" htmlFor={`tag-${index}`}>
-                                {tag}
+                                {tag.name}
                             </label>
                         </div>
                     ))}
