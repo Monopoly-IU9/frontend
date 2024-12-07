@@ -1,15 +1,31 @@
 import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { Link, useNavigate } from "react-router-dom";
+import {createGame} from "../api/GameAPI";
 
 function NewGameTemplate() {
     const [gameName, setGameName] = useState('');
+    const [error, setError] = useState('');
     const navigate = useNavigate();
 
     // логика создания шаблона игры
-    const handleCreateGame = (e) => {
+    const handleCreateGame = async (e) => {
         e.preventDefault();
-        navigate('/admin');
+        setError(''); // Очистка ошибок перед началом запроса
+
+        if (!gameName.trim()) {
+            setError('Имя игры не может быть пустым.');
+            return;
+        }
+
+        try {
+            await createGame(gameName, [], []); // Удаляем символ "#" из цвета перед отправкой
+            navigate('/admin'); // Переход обратно к списку категорий после успешного создания
+        } catch (err) {
+            console.error('Ошибка при создании игры:', err);
+            setError('Не удалось создать игру. Попробуйте позже.');
+        }
+
     };
 
     return (
@@ -24,6 +40,7 @@ function NewGameTemplate() {
                 Главная
             </Link>
             <h2>Новая игра</h2>
+            {error && <div className="alert alert-danger">{error}</div>}
             <div className="mb-3">
                 <label className="form-label">Имя игры</label>
                 <input type="text"

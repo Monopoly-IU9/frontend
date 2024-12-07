@@ -7,6 +7,11 @@ export const adminGetGames = async () => {
     return response.data;
 };
 
+export const createGame = async (name, sets, categories) => {
+    const response = await axios.post(`${BASE_URL}/admin/new-game`, { name, sets, categories });
+    return response.data;
+}
+
 // Получение информации об игре для админа
 export const getGameInfo = async (id) => {
     const response = await axios.get(`${BASE_URL}/admin/getgameInfo/${id}`);
