@@ -29,3 +29,9 @@ export const deleteGame = async (id) => {
     const response = await axios.post(`${BASE_URL}/admin/deleteGameByID?game_id=${id}`);
     return response.data;
 }
+
+// Получение списка игры для ведущего
+export const hostGetGames = async () => {
+    const response = await axios.get(`${BASE_URL}/host/getGames`);
+    return response.data;
+};
