@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import {Link, useLocation, useNavigate} from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Container, ListGroup, Button } from 'react-bootstrap';
+import { hostGetCategoriesByGameID } from '../api/GameAPI';
 
 function GameSettingsPage() {
     const location = useLocation();
@@ -10,25 +11,33 @@ function GameSettingsPage() {
     const gameId = queryParams.get('id');
 
     const [gameDetails, setGameDetails] = useState(null);
-
-    const placeholderGameDetails = {
-        id: gameId,
-        name: `${gameId}`,
-        categories: [
-            { id: 1, name: 'Категория 1' },
-            { id: 2, name: 'Категория 2' },
-        ],
-    };
+    const [isLoading, setIsLoading] = useState(true); // Индикатор загрузки
 
     useEffect(() => {
-        setGameDetails(placeholderGameDetails);
+        if (gameId) {
+            const fetchGameDetails = async () => {
+                try {
+                    const data = await hostGetCategoriesByGameID(gameId);
+                    setGameDetails(data);
+                } catch (error) {
+                    console.error('Ошибка при загрузке данных игры:', error);
+                    alert('Не удалось загрузить данные игры.');
+                } finally {
+                    setIsLoading(false);
+                }
+            };
+
+            fetchGameDetails();
+        }
     }, [gameId]);
-    // обработка запуска игры
+
     const handleStartGame = () => {
         navigate(`/game?id=${gameId}`);
     };
 
-    if (!gameDetails) return <div>Loading...</div>;
+    if (isLoading) return <div className="text-center mt-5">Загрузка...</div>;
+
+    if (!gameDetails) return <div className="text-center mt-5">Ошибка загрузки данных</div>;
 
     return (
         <Container className="container bg-light rounded p-4 shadow-sm">
@@ -38,8 +47,7 @@ function GameSettingsPage() {
                 </svg>
                 Назад
             </Link>
-            <h2 className="text-primary">Настройки Игры: {gameDetails.name}</h2>
-            <p className="text-muted mb-4">Выбранные категории для этой игры:</p>
+            <p className="text-muted mb-4">Выбранные категории для игры:</p>
             <ListGroup className="mb-4">
                 {gameDetails.categories.map(category => (
                     <ListGroup.Item key={category.id}>{category.name}</ListGroup.Item>
@@ -53,26 +61,3 @@ function GameSettingsPage() {
 }
 
 export default GameSettingsPage;
-
-
-// useEffect(() => {
-    //     const loadGameDetails = async () => {
-    //         try {
-    //             const response = await fetchGameDetails(gameId);
-    //             setGameDetails(response.data);
-    //         } catch (error) {
-    //             console.error("Error loading game details:", error);
-    //         }
-    //     };
-    //     loadGameDetails();
-    // }, [gameId]);
-    //
-    // const handleStartGame = async () => {
-    //     try {
-    //         await activateGame(gameId);
-    //         navigate(`/game?id=${gameId}`);
-    //     } catch (error) {
-    //         console.error("Error starting game:", error);
-    //     }
-    // };
-

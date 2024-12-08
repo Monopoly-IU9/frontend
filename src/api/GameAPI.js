@@ -35,3 +35,9 @@ export const hostGetGames = async () => {
     const response = await axios.get(`${BASE_URL}/host/getGames`);
     return response.data;
 };
+
+// Получение категорий в игре для ведущего
+export const hostGetCategoriesByGameID = async (id) => {
+    const response = await axios.post(`${BASE_URL}/host/getCategoriesByGameID?game_id=${id}`);
+    return response.data;
+}
