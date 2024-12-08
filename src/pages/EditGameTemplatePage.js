@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { getGameInfo, editGame } from '../api/GameAPI';
+import {getGameInfo, editGame, deleteGame} from '../api/GameAPI';
 
 function EditGameTemplate() {
     const [searchParams] = useSearchParams();
@@ -88,11 +88,17 @@ function EditGameTemplate() {
         }
     };
 
-    const handleDeleteGame = (e) => {
-        e.preventDefault();
-        // Логика удаления игры (при необходимости можно добавить API-ручку)
-        alert('Игра удалена');
-        navigate('/admin');
+    const handleDeleteGame = async () => {
+        if (!gameId) {
+            console.error('ID игры не найден')
+            return;
+        }
+        try {
+            await deleteGame(gameId); // Вызов API для удаления
+            navigate('/admin');
+        } catch (error) {
+            console.error('Ошибка при удалении категории:', error);
+        }
     };
 
     return (

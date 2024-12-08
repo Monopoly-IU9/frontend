@@ -7,8 +7,8 @@ export const adminGetGames = async () => {
     return response.data;
 };
 
-export const createGame = async (name, sets, categories) => {
-    const response = await axios.post(`${BASE_URL}/admin/new-game`, { name, sets, categories });
+export const createGame = async (name, sets, categories, hashtags) => {
+    const response = await axios.post(`${BASE_URL}/admin/new-game`, { name, sets, categories, hashtags });
     return response.data;
 }
 
@@ -24,3 +24,8 @@ export const editGame = async (id, name, sets, categories, hashtags) => {
     return response.data;
 };
 
+// Удаление игры админом
+export const deleteGame = async (id) => {
+    const response = await axios.post(`${BASE_URL}/admin/deleteGameByID?game_id=${id}`);
+    return response.data;
+}

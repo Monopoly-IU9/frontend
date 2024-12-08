@@ -19,7 +19,7 @@ function NewGameTemplate() {
         }
 
         try {
-            await createGame(gameName, [], []); // Удаляем символ "#" из цвета перед отправкой
+            await createGame(gameName, [], [], []); // Удаляем символ "#" из цвета перед отправкой
             navigate('/admin'); // Переход обратно к списку категорий после успешного создания
         } catch (err) {
             console.error('Ошибка при создании игры:', err);
