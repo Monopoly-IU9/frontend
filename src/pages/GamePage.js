@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Container, Button, Row, Col, ListGroup } from 'react-bootstrap';
 import QRCodeModal from '../components/QRCodeModal';
 import CardModal from '../components/CardModal';
-import { hostGetCategoriesByGameID, finishGame } from '../api/GameAPI';
+import { hostGetCategoriesByGameID, finishGame, drawCard } from '../api/GameAPI';
 
 function GamePage({ isHost }) {
     const location = useLocation();
@@ -21,22 +21,8 @@ function GamePage({ isHost }) {
                 const data = await hostGetCategoriesByGameID(gameId);
                 setGameInfo({
                     id: data.game_id,
-                    name: `Игра ${data.game_id}`,
-                    categories: data.categories.map((category) => ({
-                        ...category,
-                        cards: [
-                            {
-                                id: 1,
-                                description: `Пример карточки для ${category.name} - 1`,
-                                tags: ['tag1', 'tag2'],
-                            },
-                            {
-                                id: 2,
-                                description: `Пример карточки для ${category.name} - 2`,
-                                tags: ['tag3', 'tag4'],
-                            },
-                        ],
-                    })),
+                    name: `Игра`,
+                    categories: data.categories,
                 });
             } catch (error) {
                 console.error('Ошибка при загрузке категорий:', error);
@@ -64,10 +50,21 @@ function GamePage({ isHost }) {
     const handleShowModal = () => setShowModal(true); // Открытие модального окна
     const handleCloseModal = () => setShowModal(false); // Закрытие модального окна
 
-    const handleCategoryClick = (category) => {
-        const randomCard = category.cards[Math.floor(Math.random() * category.cards.length)];
-        setSelectedCard({ ...randomCard, categoryId: category.id, color: category.color });
-        setShowCardModal(true); // Открыть модальное окно с карточкой
+    const handleCategoryClick = async (category) => {
+        try {
+            const cardData = await drawCard(gameId, category.id);
+            setSelectedCard({
+                id: cardData.number,
+                description: cardData.description,
+                color: cardData.color,
+                categoryId: category.id,
+                name: cardData.name,
+            });
+            setShowCardModal(true); // Открыть модальное окно с карточкой
+        } catch (error) {
+            console.error('Ошибка при взятии карточки:', error);
+            alert('Данная категория пуста.');
+        }
     };
 
     const handleCloseCardModal = () => setShowCardModal(false); // Закрытие карточки
