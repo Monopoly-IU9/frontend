@@ -53,3 +53,9 @@ export const finishGame = async (game_id) => {
     const response = await axios.post(`${BASE_URL}/host/finish-game/${game_id}`);
     return response.data;
 }
+
+// Взятие карточки в игре
+export const drawCard = async (game_id, category_id) => {
+    const response = await axios.post(`${BASE_URL}/game/draw-card/${game_id}?category_id=${category_id}`);
+    return response.data;
+}

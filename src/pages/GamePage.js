@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Container, Button, Row, Col, ListGroup } from 'react-bootstrap';
 import QRCodeModal from '../components/QRCodeModal';
 import CardModal from '../components/CardModal';
-import { finishGame } from '../api/GameAPI';
+import { hostGetCategoriesByGameID, finishGame } from '../api/GameAPI';
 
 function GamePage({ isHost }) {
     const location = useLocation();
@@ -16,39 +16,35 @@ function GamePage({ isHost }) {
     const navigate = useNavigate();
 
     useEffect(() => {
-        setGameInfo({
-            id: gameId,
-            name: `Игра ${gameId}`,
-            categories: [
-                {
-                    id: 1,
-                    name: 'Категория 1',
-                    color: 'success',
-                    cards: [
-                        { id: 1, description: 'Пример карточки 1', tags: ['tag1', 'tag2'] },
-                        { id: 2, description: 'Пример карточки 2', tags: ['tag3', 'tag4'] },
-                    ],
-                },
-                {
-                    id: 2,
-                    name: 'Категория 2',
-                    color: 'danger',
-                    cards: [
-                        { id: 1, description: 'Пример карточки 3', tags: ['tag5'] },
-                        { id: 2, description: 'Пример карточки 4', tags: ['tag6', 'tag7'] },
-                    ],
-                },
-                {
-                    id: 3,
-                    name: 'Категория 3',
-                    color: 'primary',
-                    cards: [
-                        { id: 1, description: 'Пример карточки 5', tags: ['tag8'] },
-                        { id: 2, description: 'Пример карточки 6', tags: ['tag9'] },
-                    ],
-                },
-            ],
-        });
+        const fetchGameCategories = async () => {
+            try {
+                const data = await hostGetCategoriesByGameID(gameId);
+                setGameInfo({
+                    id: data.game_id,
+                    name: `Игра ${data.game_id}`,
+                    categories: data.categories.map((category) => ({
+                        ...category,
+                        cards: [
+                            {
+                                id: 1,
+                                description: `Пример карточки для ${category.name} - 1`,
+                                tags: ['tag1', 'tag2'],
+                            },
+                            {
+                                id: 2,
+                                description: `Пример карточки для ${category.name} - 2`,
+                                tags: ['tag3', 'tag4'],
+                            },
+                        ],
+                    })),
+                });
+            } catch (error) {
+                console.error('Ошибка при загрузке категорий:', error);
+                alert('Не удалось загрузить категории игры.');
+            }
+        };
+
+        fetchGameCategories();
     }, [gameId]);
 
     const handleEndGame = async () => {
@@ -76,7 +72,7 @@ function GamePage({ isHost }) {
 
     const handleCloseCardModal = () => setShowCardModal(false); // Закрытие карточки
 
-    if (!gameInfo) return <div>Loading...</div>;
+    if (!gameInfo) return <div className="text-center mt-5">Загрузка...</div>;
 
     return (
         <Container className="my-5">
@@ -87,8 +83,13 @@ function GamePage({ isHost }) {
                 {gameInfo.categories.map((category) => (
                     <ListGroup.Item
                         key={category.id}
-                        variant={category.color}
-                        style={{ fontSize: '1.25rem', padding: '12px 20px', cursor: 'pointer' }}
+                        style={{
+                            backgroundColor: `#${category.color}`,
+                            color: 'white',
+                            fontSize: '1.25rem',
+                            padding: '12px 20px',
+                            cursor: 'pointer',
+                        }}
                         onClick={() => handleCategoryClick(category)}
                     >
                         {category.name}
