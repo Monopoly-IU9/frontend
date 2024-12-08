@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Container, Button, Row, Col, ListGroup } from 'react-bootstrap';
 import QRCodeModal from '../components/QRCodeModal';
 import CardModal from '../components/CardModal';
+import { finishGame } from '../api/GameAPI';
 
 function GamePage({ isHost }) {
     const location = useLocation();
@@ -14,34 +15,50 @@ function GamePage({ isHost }) {
     const [showCardModal, setShowCardModal] = useState(false); // Для модального окна с карточкой
     const navigate = useNavigate();
 
-    // Временные данные для игры и карточек
-    const placeholderGameInfo = {
-        id: gameId,
-        name: `Игра ${gameId}`,
-        categories: [
-            { id: 1, name: 'Категория 1', color: 'success', cards: [
-                    { id: 1, description: 'Пример карточки 1', tags: ['tag1', 'tag2'] },
-                    { id: 2, description: 'Пример карточки 2', tags: ['tag3', 'tag4'] },
-                ] },
-            { id: 2, name: 'Категория 2', color: 'danger', cards: [
-                    { id: 1, description: 'Пример карточки 3', tags: ['tag5'] },
-                    { id: 2, description: 'Пример карточки 4', tags: ['tag6', 'tag7'] },
-                ] },
-            { id: 3, name: 'Категория 3', color: 'primary', cards: [
-                    { id: 1, description: 'Пример карточки 5', tags: ['tag8'] },
-                    { id: 2, description: 'Пример карточки 6', tags: ['tag9'] },
-                ] },
-        ],
-    };
-
     useEffect(() => {
-        // загрузка данных игры
-        setGameInfo(placeholderGameInfo);
+        setGameInfo({
+            id: gameId,
+            name: `Игра ${gameId}`,
+            categories: [
+                {
+                    id: 1,
+                    name: 'Категория 1',
+                    color: 'success',
+                    cards: [
+                        { id: 1, description: 'Пример карточки 1', tags: ['tag1', 'tag2'] },
+                        { id: 2, description: 'Пример карточки 2', tags: ['tag3', 'tag4'] },
+                    ],
+                },
+                {
+                    id: 2,
+                    name: 'Категория 2',
+                    color: 'danger',
+                    cards: [
+                        { id: 1, description: 'Пример карточки 3', tags: ['tag5'] },
+                        { id: 2, description: 'Пример карточки 4', tags: ['tag6', 'tag7'] },
+                    ],
+                },
+                {
+                    id: 3,
+                    name: 'Категория 3',
+                    color: 'primary',
+                    cards: [
+                        { id: 1, description: 'Пример карточки 5', tags: ['tag8'] },
+                        { id: 2, description: 'Пример карточки 6', tags: ['tag9'] },
+                    ],
+                },
+            ],
+        });
     }, [gameId]);
 
-    const handleEndGame = () => {
-        // окончание игры
-        navigate(isHost ? '/games' : '/home');
+    const handleEndGame = async () => {
+        try {
+            await finishGame(gameId);
+            navigate(isHost ? '/games' : '/home');
+        } catch (error) {
+            console.error('Ошибка при завершении игры:', error);
+            alert('Не удалось завершить игру.');
+        }
     };
 
     const handleLogout = () => {

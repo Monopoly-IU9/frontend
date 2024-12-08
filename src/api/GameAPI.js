@@ -41,3 +41,15 @@ export const hostGetCategoriesByGameID = async (id) => {
     const response = await axios.post(`${BASE_URL}/host/getCategoriesByGameID?game_id=${id}`);
     return response.data;
 }
+
+// Старт игры ведущим
+export const startGame = async (game_id) => {
+    const response = await axios.post(`${BASE_URL}/host/start-game/${game_id}`);
+    return response.data;
+}
+
+// Завершение игры ведущим
+export const finishGame = async (game_id) => {
+    const response = await axios.post(`${BASE_URL}/host/finish-game/${game_id}`);
+    return response.data;
+}
