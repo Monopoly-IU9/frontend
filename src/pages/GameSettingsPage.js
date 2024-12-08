@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Container, ListGroup, Button } from 'react-bootstrap';
-import { hostGetCategoriesByGameID } from '../api/GameAPI';
+import { hostGetCategoriesByGameID, startGame } from '../api/GameAPI'; // Импорт API
 
 function GameSettingsPage() {
     const location = useLocation();
@@ -31,8 +31,14 @@ function GameSettingsPage() {
         }
     }, [gameId]);
 
-    const handleStartGame = () => {
-        navigate(`/game?id=${gameId}`);
+    const handleStartGame = async () => {
+        try {
+            await startGame(gameId);
+            navigate(`/game?id=${gameId}`);
+        } catch (error) {
+            console.error('Ошибка при запуске игры:', error);
+            alert('Не удалось запустить игру.');
+        }
     };
 
     if (isLoading) return <div className="text-center mt-5">Загрузка...</div>;
