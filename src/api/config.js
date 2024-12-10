@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export let BASE_URL = 'http://127.0.0.1:8000';
+export let BASE_URL = 'https://31.31.196.84:8000';
 
 // Настраиваем интерсепторы для добавления токена
 axios.interceptors.request.use((config) => {
