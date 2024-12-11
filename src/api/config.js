@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export let BASE_URL = 'https://31.31.196.84:8000';
+export let BASE_URL = 'https://timetoplay.pro/api';
 
 // Настраиваем интерсепторы для добавления токена
 axios.interceptors.request.use((config) => {
