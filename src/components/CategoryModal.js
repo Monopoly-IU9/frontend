@@ -13,7 +13,7 @@ function CategoryModal({ show, onClose, onSave, card }) {
             setTags(card.tags || []);
         } else {
             setDescription('');
-            setTags([]);
+            setTags(["Единый"]);
         }
     }, [card]);
     // обработка добавления тега
