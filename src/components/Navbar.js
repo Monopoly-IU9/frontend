@@ -25,7 +25,7 @@ function CustomNavbar({ isHostAuthenticated, setIsHostAuthenticated }) {
         <Navbar bg="primary" variant="dark" expand="lg">
             <Container>
                 <Navbar.Brand as={Link} to="/home">
-                    Monopoly
+                    Timetoplay
                 </Navbar.Brand>
                 <Nav className="ms-auto">
                     {isHostAuthenticated && (
