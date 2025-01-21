@@ -17,7 +17,15 @@ function CardModal({ show, onClose, card }) {
             </Modal.Header>
             <Modal.Body>
                 <p>
-                    <strong>{card.id}</strong>: {card.description}
+                    <strong>{card.id}</strong>
+                </p>
+                <p>
+                    {card.description.split('\n').map((line, index) => (
+                        <span key={index}>
+                {line}
+                            <br />
+            </span>
+                    ))}
                 </p>
             </Modal.Body>
         </Modal>

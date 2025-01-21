@@ -42,9 +42,16 @@ function CategoryModal({ show, onClose, onSave, card }) {
                 <Form.Group className="mb-3">
                     <Form.Label>Описание</Form.Label>
                     <Form.Control
-                        type="text"
+                        as="textarea"
+                        rows={4}
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter' && e.shiftKey && e.metaKey) {
+                                e.preventDefault();
+                                setDescription((prev) => `${prev}\n`);
+                            }
+                        }}
                     />
                 </Form.Group>
 
